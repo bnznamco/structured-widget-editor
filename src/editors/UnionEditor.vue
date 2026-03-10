@@ -20,12 +20,12 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue';
 import { getDefaultForSchema } from '../utils';
-import SchemaEditor from './SchemaEditor.vue';
 
 export default {
   name: 'UnionEditor',
-  components: { SchemaEditor },
+  components: { SchemaEditor: defineAsyncComponent(() => import('./SchemaEditor.vue')) },
   props: {
     schema: { type: Object, required: true },
     modelValue: { default: null },

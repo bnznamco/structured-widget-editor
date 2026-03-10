@@ -38,14 +38,14 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue';
 import { getDefaultForSchema } from '../utils';
-import SchemaEditor from './SchemaEditor.vue';
 
 let keyCounter = 0;
 
 export default {
   name: 'ArrayEditor',
-  components: { SchemaEditor },
+  components: { SchemaEditor: defineAsyncComponent(() => import('./SchemaEditor.vue')) },
   props: {
     schema: { type: Object, required: true },
     modelValue: { default: () => [] },

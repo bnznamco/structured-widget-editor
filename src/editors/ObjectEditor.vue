@@ -29,11 +29,11 @@
 </template>
 
 <script>
-import SchemaEditor from './SchemaEditor.vue';
+import { defineAsyncComponent } from 'vue';
 
 export default {
   name: 'ObjectEditor',
-  components: { SchemaEditor },
+  components: { SchemaEditor: defineAsyncComponent(() => import('./SchemaEditor.vue')) },
   props: {
     schema: { type: Object, required: true },
     modelValue: { default: () => ({}) },
