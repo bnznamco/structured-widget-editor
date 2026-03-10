@@ -1,0 +1,69 @@
+{
+  "name": "@structured/widget-editor",
+  "version": "0.1.0",
+  "description": "A lightweight JSON Schema form builder with support for relation fields (ForeignKey, QuerySet) and autocomplete search.",
+  "type": "module",
+  "main": "dist/structured-widget-editor.js",
+  "module": "dist/structured-widget-editor.esm.js",
+  "exports": {
+    ".": {
+      "import": "./dist/structured-widget-editor.esm.js",
+      "require": "./dist/structured-widget-editor.js"
+    },
+    "./css": "./dist/structured-widget-editor.css",
+    "./scss": "./src/scss/main.scss"
+  },
+  "files": [
+    "dist",
+    "src",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test:serve": "node test/serve.mjs"
+  },
+  "keywords": [
+    "json-schema",
+    "form-builder",
+    "structured",
+    "widget",
+    "editor",
+    "autocomplete",
+    "relation"
+  ],
+  "author": "Lotrek",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^29.0.2",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@vitejs/plugin-vue": "^6.0.4",
+    "@vue/compiler-sfc": "^3.5.30",
+    "happy-dom": "^20.8.3",
+    "rollup": "^4.9.1",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-scss": "^4.0.0",
+    "rollup-plugin-vue": "^6.0.0",
+    "sass": "^1.69.7",
+    "vitest": "^4.0.18"
+  },
+  "dependencies": {
+    "vue": "^3.5.30"
+  },
+  "release": {
+    "branches": ["main"],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      ["@semantic-release/git", {
+        "assets": ["package.json", "CHANGELOG.md"],
+        "message": "chore(release): ${nextRelease.version} [skip ci]"
+      }],
+      "@semantic-release/github"
+    ]
+  }
+}

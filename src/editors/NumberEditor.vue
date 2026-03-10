@@ -1,0 +1,53 @@
+<template>
+  <div class="sf-field">
+    <label class="sf-label" :class="{ required: isRequired }">{{ title }}</label>
+    <input
+      type="number"
+      class="sf-input"
+      :step="schema.type === 'integer' ? '1' : 'any'"
+      :min="schema.minimum != null ? String(schema.minimum) : undefined"
+      :max="schema.maximum != null ? String(schema.maximum) : undefined"
+      :value="modelValue != null ? modelValue : ''"
+      @input="onInput"
+    />
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'NumberEditor',
+  props: {
+    schema: { type: Object, required: true },
+    modelValue: { default: 0 },
+    path: { type: Array, default: () => [] },
+    form: { type: Object, default: null },
+  },
+  emits: ['update:modelValue'],
+  computed: {
+    title() {
+      return this.schema.title || this.humanize(this.path[this.path.length - 1]) || '';
+    },
+    isRequired() {
+      if (this.path.length < 2 || !this.form) return false;
+      const parentPath = this.path.slice(0, -1);
+      const fieldName = this.path[this.path.length - 1];
+      const parentSchema = this.form.getSchemaAtPath(parentPath);
+      return parentSchema && Array.isArray(parentSchema.required) && parentSchema.required.includes(fieldName);
+    },
+  },
+  methods: {
+    humanize(str) {
+      if (!str) return '';
+      return str.replace(/_/g, ' ').replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, s => s.toUpperCase());
+    },
+    onInput(e) {
+      const raw = e.target.value;
+      if (raw === '') {
+        this.$emit('update:modelValue', 0);
+      } else {
+        this.$emit('update:modelValue', this.schema.type === 'integer' ? parseInt(raw, 10) : parseFloat(raw));
+      }
+    },
+  },
+};
+</script>

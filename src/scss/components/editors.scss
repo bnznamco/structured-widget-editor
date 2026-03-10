@@ -1,0 +1,162 @@
+.structured-field-editor {
+
+  // --- Field spacing ---
+  .sf-field {
+    margin-bottom: 12px;
+  }
+
+  .sf-field-boolean {
+    margin-bottom: 8px;
+  }
+
+  // --- Object editor ---
+  .sf-object {
+    &.sf-object-root {
+      // Root level: no border
+    }
+
+    &:not(.sf-object-root) {
+      border: 1px solid var(--border-color, #ccc);
+      border-radius: 4px;
+      padding: 12px;
+      margin-bottom: 12px;
+      background: var(--body-bg, #fff);
+    }
+  }
+
+  .sf-object-title {
+    font-weight: 600;
+    font-size: 0.8125rem;
+    color: var(--body-fg, #333);
+    text-transform: capitalize;
+    padding: 0 4px;
+  }
+
+  .sf-object-fields {
+    display: flex;
+    flex-direction: column;
+  }
+
+  // --- Array editor ---
+  .sf-array {
+    margin-bottom: 12px;
+  }
+
+  .sf-array-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+
+    .sf-label {
+      margin-bottom: 0;
+    }
+  }
+
+  .sf-array-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    background: var(--darkened-bg, #f0f0f0);
+    border-radius: 10px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--body-quiet-color, #666);
+  }
+
+  .sf-array-items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .sf-array-item {
+    border: 1px solid var(--border-color, #ccc);
+    border-radius: 4px;
+    background: var(--darkened-bg, #f8f8f8);
+    overflow: hidden;
+  }
+
+  .sf-array-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 8px;
+    background: var(--darkened-bg, #f0f0f0);
+    border-bottom: 1px solid var(--border-color, #ccc);
+  }
+
+  .sf-array-item-index {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--body-quiet-color, #666);
+  }
+
+  .sf-array-item-actions {
+    display: flex;
+    gap: 4px;
+  }
+
+  .sf-array-item-body {
+    padding: 10px;
+
+    > .sf-object.sf-object-root,
+    > .sf-object:not(.sf-object-root) {
+      border: none;
+      padding: 0;
+      margin: 0;
+      background: transparent;
+    }
+  }
+
+  // --- Nullable editor ---
+  .sf-nullable {
+    margin-bottom: 12px;
+  }
+
+  .sf-nullable-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+
+    .sf-label {
+      margin-bottom: 0;
+    }
+  }
+
+  .sf-nullable-body {
+    padding-left: 0;
+
+    &:not(:empty) {
+      border: 1px solid var(--border-color, #ccc);
+      border-radius: 4px;
+      padding: 12px;
+      margin-top: 4px;
+      background: var(--body-bg, #fff);
+    }
+  }
+
+  // --- Union editor ---
+  .sf-union {
+    margin-bottom: 12px;
+  }
+
+  .sf-union-body {
+    border: 1px solid var(--border-color, #ccc);
+    border-radius: 4px;
+    padding: 12px;
+    margin-top: 8px;
+    background: var(--body-bg, #fff);
+
+    > .sf-object {
+      border: none;
+      padding: 0;
+      margin: 0;
+      background: transparent;
+    }
+  }
+}
