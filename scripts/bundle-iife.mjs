@@ -16,7 +16,7 @@ const dist = resolve(__dirname, '..', 'dist');
 const css = readFileSync(resolve(dist, 'structured-widget-editor.css'), 'utf8');
 const js = readFileSync(resolve(dist, 'structured-widget-editor.js'), 'utf8');
 
-const banner = `/* @structured/widget-editor – IIFE bundle with embedded CSS */\n`;
+const banner = `/* @structured-field/widget-editor – IIFE bundle with embedded CSS */\n`;
 const cssInjector = `(function(){var s=document.createElement("style");s.textContent=${JSON.stringify(css)};document.head.appendChild(s)})();\n`;
 
 writeFileSync(resolve(dist, 'structured-widget-editor.iife.js'), banner + cssInjector + js);

@@ -12,8 +12,8 @@ export default defineConfig({
   resolve: {
     alias: {
       'vue': 'vue/dist/vue.esm-bundler.js',
-      '@structured/widget-editor/scss': resolve(__dirname, 'src/scss/main.scss'),
-      '@structured/widget-editor': resolve(__dirname, 'src/index.js'),
+      '@structured-field/widget-editor/scss': resolve(__dirname, 'src/scss/main.scss'),
+      '@structured-field/widget-editor': resolve(__dirname, 'src/index.js'),
     },
   },
 });

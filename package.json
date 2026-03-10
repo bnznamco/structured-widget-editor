@@ -1,5 +1,5 @@
 {
-  "name": "@structured/widget-editor",
+  "name": "@structured-field/widget-editor",
   "version": "0.1.0",
   "description": "A lightweight JSON Schema form builder with support for relation fields (ForeignKey, QuerySet) and autocomplete search.",
   "type": "module",
@@ -37,6 +37,9 @@
   ],
   "author": "Lotrek",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^29.0.2",
     "@rollup/plugin-node-resolve": "^16.0.3",

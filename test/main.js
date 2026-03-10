@@ -1,6 +1,6 @@
 import { createApp, ref, shallowRef, computed } from 'vue';
-import { SchemaForm } from '@structured/widget-editor';
-import '@structured/widget-editor/scss';
+import { SchemaForm } from '@structured-field/widget-editor';
+import '@structured-field/widget-editor/scss';
 
 const sampleData = {
   title: 'One Hundred Years of Solitude',

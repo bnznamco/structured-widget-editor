@@ -1,4 +1,4 @@
-# @structured/widget-editor
+# @structured-field/widget-editor
 
 A Vue-powered JSON Schema form builder with first-class support for relation fields (ForeignKey, QuerySet) and autocomplete search. Ships as both Vue components and a Web Component custom element.
 
@@ -17,9 +17,9 @@ Built for the [django-structured-json-field](https://github.com/bnznamco/django-
 ## Installation
 
 ```bash
-npm install @structured/widget-editor
+npm install @structured-field/widget-editor
 # or
-pnpm add @structured/widget-editor
+pnpm add @structured-field/widget-editor
 ```
 
 ## Usage
@@ -29,8 +29,8 @@ pnpm add @structured/widget-editor
 Register the `<schema-form>` custom element, then use it in any HTML page or framework:
 
 ```js
-import { registerCustomElement } from '@structured/widget-editor';
-import '@structured/widget-editor/css';
+import { registerCustomElement } from '@structured-field/widget-editor';
+import '@structured-field/widget-editor/css';
 
 registerCustomElement(); // registers <schema-form>
 ```
@@ -85,8 +85,8 @@ Import `SchemaForm` directly for use inside Vue applications:
 </template>
 
 <script setup>
-import { SchemaForm } from '@structured/widget-editor';
-import '@structured/widget-editor/css';
+import { SchemaForm } from '@structured-field/widget-editor';
+import '@structured-field/widget-editor/css';
 
 const schema = { /* JSON Schema */ };
 const data = { /* initial form data */ };
@@ -126,9 +126,9 @@ A single `<script>` tag that includes both JS and CSS — no separate stylesheet
 #### Via jsDelivr (from npm)
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@structured/widget-editor@latest/dist/structured-widget-editor.iife.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@structured-field/widget-editor@latest/dist/structured-widget-editor.iife.js"></script>
 <!-- or pinned -->
-<script src="https://cdn.jsdelivr.net/npm/@structured/widget-editor@1.0.0/dist/structured-widget-editor.iife.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@structured-field/widget-editor@1.0.0/dist/structured-widget-editor.iife.js"></script>
 ```
 
 #### Usage
