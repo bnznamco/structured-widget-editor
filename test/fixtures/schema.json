@@ -1,0 +1,150 @@
+{
+  "$defs": {
+    "PhysicalFormat": {
+      "type": "object",
+      "title": "Physical Format",
+      "properties": {
+        "format_type": { "const": "physical", "default": "physical" },
+        "weight_grams": { "type": "integer", "title": "Weight (g)", "default": 0, "minimum": 0 },
+        "dimensions": { "type": "string", "title": "Dimensions", "default": "" }
+      },
+      "required": ["format_type"]
+    },
+    "DigitalFormat": {
+      "type": "object",
+      "title": "Digital Format",
+      "properties": {
+        "format_type": { "const": "digital", "default": "digital" },
+        "file_size_mb": { "type": "number", "title": "File Size (MB)", "default": 0, "minimum": 0 },
+        "drm_protected": { "type": "boolean", "title": "DRM Protected", "default": false }
+      },
+      "required": ["format_type"]
+    },
+    "Chapter": {
+      "type": "object",
+      "title": "Chapter",
+      "properties": {
+        "title": { "type": "string", "title": "Chapter Title" },
+        "pages": { "type": "integer", "title": "Pages", "default": 0, "minimum": 1 }
+      },
+      "required": ["title"]
+    }
+  },
+  "type": "object",
+  "title": "Book",
+  "properties": {
+    "title": { "type": "string", "title": "Title" },
+    "isbn": { "type": "string", "title": "ISBN" },
+    "description": { "type": "string", "title": "Description", "format": "textarea", "maxLength": 2000 },
+    "pages": { "type": "integer", "title": "Pages", "default": 0, "minimum": 1, "maximum": 10000 },
+    "price": { "type": "number", "title": "Price", "default": 0, "minimum": 0 },
+    "published": { "type": "boolean", "title": "Published", "default": false },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": ["draft", "review", "published", "archived"],
+      "default": "draft"
+    },
+    "language": {
+      "type": "string",
+      "title": "Language",
+      "enum": ["en", "es", "fr", "de", "it", "pt"],
+      "default": "en"
+    },
+    "main_author": {
+      "type": "relation",
+      "title": "Main Author",
+      "multiple": false,
+      "model": "library.Author",
+      "options": {
+        "select2": {
+          "placeholder": "Select an author...",
+          "allowClear": true,
+          "ajax": {
+            "url": "/structured_field/search_model/library.Author/",
+            "dataType": "json"
+          }
+        }
+      }
+    },
+    "co_authors": {
+      "type": "relation",
+      "title": "Co-Authors",
+      "multiple": true,
+      "model": "library.Author",
+      "options": {
+        "select2": {
+          "placeholder": "Search for co-authors...",
+          "multiple": true,
+          "allowClear": true,
+          "ajax": {
+            "url": "/structured_field/search_model/library.Author/",
+            "dataType": "json"
+          }
+        }
+      }
+    },
+    "publisher": {
+      "type": "relation",
+      "title": "Publisher",
+      "multiple": false,
+      "model": "library.Publisher",
+      "options": {
+        "select2": {
+          "placeholder": "Select a publisher...",
+          "allowClear": true,
+          "ajax": {
+            "url": "/structured_field/search_model/library.Publisher/",
+            "dataType": "json"
+          }
+        }
+      }
+    },
+    "categories": {
+      "type": "relation",
+      "title": "Categories",
+      "multiple": true,
+      "model": "library.Category",
+      "options": {
+        "select2": {
+          "placeholder": "Search categories...",
+          "multiple": true,
+          "allowClear": true,
+          "ajax": {
+            "url": "/structured_field/search_model/library.Category/",
+            "dataType": "json"
+          }
+        }
+      }
+    },
+    "notes": {
+      "title": "Notes",
+      "anyOf": [
+        { "type": "null" },
+        { "type": "string", "format": "textarea", "maxLength": 1000 }
+      ],
+      "default": null
+    },
+    "chapters": {
+      "type": "array",
+      "title": "Chapters",
+      "items": { "$ref": "#/$defs/Chapter" },
+      "default": []
+    },
+    "format": {
+      "title": "Format",
+      "oneOf": [
+        { "$ref": "#/$defs/PhysicalFormat" },
+        { "$ref": "#/$defs/DigitalFormat" }
+      ],
+      "discriminator": {
+        "propertyName": "format_type",
+        "mapping": {
+          "physical": "#/$defs/PhysicalFormat",
+          "digital": "#/$defs/DigitalFormat"
+        }
+      }
+    }
+  },
+  "required": ["title", "isbn", "main_author"]
+}

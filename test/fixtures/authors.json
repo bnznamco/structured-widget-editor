@@ -1,0 +1,14 @@
+[
+  { "id": 1, "name": "Gabriel García Márquez", "model": "library.Author" },
+  { "id": 2, "name": "Jorge Luis Borges", "model": "library.Author" },
+  { "id": 3, "name": "Isabel Allende", "model": "library.Author" },
+  { "id": 4, "name": "Pablo Neruda", "model": "library.Author" },
+  { "id": 5, "name": "Mario Vargas Llosa", "model": "library.Author" },
+  { "id": 6, "name": "Julio Cortázar", "model": "library.Author" },
+  { "id": 7, "name": "Octavio Paz", "model": "library.Author" },
+  { "id": 8, "name": "Carlos Fuentes", "model": "library.Author" },
+  { "id": 9, "name": "Eduardo Galeano", "model": "library.Author" },
+  { "id": 10, "name": "Roberto Bolaño", "model": "library.Author" },
+  { "id": 11, "name": "Clarice Lispector", "model": "library.Author" },
+  { "id": 12, "name": "Juan Rulfo", "model": "library.Author" }
+]

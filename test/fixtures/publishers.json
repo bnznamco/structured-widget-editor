@@ -1,0 +1,8 @@
+[
+  { "id": 1, "name": "Penguin Random House", "country": "United States", "model": "library.Publisher" },
+  { "id": 2, "name": "HarperCollins", "country": "United States", "model": "library.Publisher" },
+  { "id": 3, "name": "Editorial Sudamericana", "country": "Argentina", "model": "library.Publisher" },
+  { "id": 4, "name": "Seix Barral", "country": "Spain", "model": "library.Publisher" },
+  { "id": 5, "name": "Alfaguara", "country": "Spain", "model": "library.Publisher" },
+  { "id": 6, "name": "Fondo de Cultura Económica", "country": "Mexico", "model": "library.Publisher" }
+]

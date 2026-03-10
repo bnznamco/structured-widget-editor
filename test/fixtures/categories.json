@@ -1,0 +1,12 @@
+[
+  { "id": 1, "name": "Fantasy", "model": "library.Category" },
+  { "id": 2, "name": "Science Fiction", "model": "library.Category" },
+  { "id": 3, "name": "Mystery", "model": "library.Category" },
+  { "id": 4, "name": "Romance", "model": "library.Category" },
+  { "id": 5, "name": "Thriller", "model": "library.Category" },
+  { "id": 6, "name": "Horror", "model": "library.Category" },
+  { "id": 7, "name": "Historical Fiction", "model": "library.Category" },
+  { "id": 8, "name": "Literary Fiction", "model": "library.Category" },
+  { "id": 9, "name": "Non-Fiction", "model": "library.Category" },
+  { "id": 10, "name": "Poetry", "model": "library.Category" }
+]

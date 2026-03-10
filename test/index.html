@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Structured Widget Editor – Example</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    :root {
+      --body-bg: #fff;
+      --body-fg: #333;
+      --body-quiet-color: #666;
+      --border-color: #ccc;
+      --hairline-color: #ddd;
+      --primary: #417690;
+      --error-fg: #ba2121;
+      --darkened-bg: #f8f8f8;
+      --selected-bg: #e4e4e4;
+      --object-tools-bg: #417690;
+      --object-tools-fg: #fff;
+      --object-tools-hover-bg: #205067;
+      --delete-button-bg: #ba2121;
+      --delete-button-fg: #fff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: #f5f5f5;
+      color: var(--body-fg);
+      margin: 0;
+      padding: 0;
+    }
+
+    .app-header {
+      background: var(--object-tools-bg);
+      color: #fff;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .app-header h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .app-header .subtitle {
+      opacity: 0.75;
+      font-size: 14px;
+    }
+
+    .app-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      max-width: 1400px;
+      margin: 24px auto;
+      padding: 0 24px;
+    }
+
+    @media (max-width: 900px) {
+      .app-layout { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      background: #fff;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      background: var(--darkened-bg);
+      border-bottom: 1px solid var(--hairline-color);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .panel-header h2 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .panel-body {
+      padding: 16px;
+    }
+
+    .panel-body pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-all;
+      font-size: 13px;
+      line-height: 1.5;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border: none;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--object-tools-hover-bg);
+    }
+
+    .btn-danger {
+      background: var(--delete-button-bg);
+      color: #fff;
+    }
+
+    .btn-danger:hover {
+      background: #a01c1c;
+    }
+
+    .btn-outline {
+      background: #fff;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    .btn-outline:hover {
+      background: var(--darkened-bg);
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .validation-result {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    .validation-result.valid {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .validation-result.invalid {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .validation-result ul {
+      margin: 8px 0 0 0;
+      padding-left: 20px;
+    }
+
+    .validation-result li {
+      margin: 2px 0;
+    }
+
+    .status-bar {
+      background: var(--darkened-bg);
+      border-top: 1px solid var(--hairline-color);
+      padding: 8px 16px;
+      font-size: 12px;
+      color: var(--body-quiet-color);
+    }
+
+    #output-json {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 16px;
+      border-radius: 4px;
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="app-header">
+      <i class="fas fa-cube"></i>
+      <div>
+        <h1>Structured Widget Editor</h1>
+        <div class="subtitle">Example app with search API &amp; validation</div>
+      </div>
+    </div>
+
+    <div class="app-layout">
+      <!-- Left panel: Form -->
+      <div class="panel">
+        <div class="panel-header">
+          <h2><i class="fas fa-edit"></i>&nbsp; Book Editor</h2>
+          <div class="actions">
+            <button class="btn btn-outline" @click="loadSampleData">
+              <i class="fas fa-fill-drip"></i> Load Sample
+            </button>
+            <button class="btn btn-danger" @click="resetForm">
+              <i class="fas fa-undo"></i> Reset
+            </button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <schema-form
+            ref="form"
+            :schema="schema"
+            :initial-data="initialData"
+            @change="onFormChange"
+          ></schema-form>
+        </div>
+      </div>
+
+      <!-- Right panel: Output -->
+      <div class="panel">
+        <div class="panel-header">
+          <h2><i class="fas fa-code"></i>&nbsp; JSON Output</h2>
+          <div class="actions">
+            <button class="btn btn-primary" @click="validateData">
+              <i class="fas fa-check-circle"></i> Validate
+            </button>
+            <button class="btn btn-outline" @click="copyJSON">
+              <i class="fas fa-copy"></i> Copy
+            </button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <pre id="output-json">{{ jsonOutput }}</pre>
+          <div v-if="validation" class="validation-result" :class="validation.valid ? 'valid' : 'invalid'">
+            <template v-if="validation.valid">
+              <i class="fas fa-check-circle"></i> Data is valid!
+            </template>
+            <template v-else>
+              <i class="fas fa-exclamation-circle"></i> <strong>Validation failed</strong>
+              <ul>
+                <li v-for="(msgs, path) in validation.errors" :key="path">
+                  <strong>{{ path }}</strong>: <span v-for="(msg, i) in msgs" :key="i">{{ msg }}</span>
+                </li>
+              </ul>
+            </template>
+          </div>
+        </div>
+        <div class="status-bar">{{ statusText }}</div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
