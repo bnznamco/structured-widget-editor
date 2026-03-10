@@ -1,5 +1,5 @@
 <template>
-  <div class="sf-nullable">
+  <div class="sf-nullable" :class="{ errors: fieldErrors.length }">
     <div class="sf-nullable-header">
       <label class="sf-label" :class="{ required: isRequired }">{{ title }}</label>
       <button type="button" :class="toggleClass" @click="toggle">
@@ -21,6 +21,9 @@
         @update:model-value="$emit('update:modelValue', $event)"
       />
     </div>
+    <ul v-if="fieldErrors.length" class="errorlist">
+      <li v-for="(err, i) in fieldErrors" :key="i">{{ err }}</li>
+    </ul>
   </div>
 </template>
 
@@ -61,6 +64,10 @@ export default {
     },
     toggleClass() {
       return this.isNull ? 'sf-btn sf-btn-sm sf-btn-add' : 'sf-btn sf-btn-sm sf-btn-danger';
+    },
+    fieldErrors() {
+      if (!this.form || !this.form.getErrorsForPath) return [];
+      return this.form.getErrorsForPath(this.path);
     },
   },
   watch: {

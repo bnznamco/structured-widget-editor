@@ -1,5 +1,5 @@
 <template>
-  <div class="sf-array">
+  <div class="sf-array" :class="{ errors: fieldErrors.length }">
     <div class="sf-array-header">
       <span class="sf-label">{{ title }}</span>
       <span class="sf-array-count">{{ items.length }}</span>
@@ -34,6 +34,9 @@
         </div>
       </div>
     </div>
+    <ul v-if="fieldErrors.length" class="errorlist">
+      <li v-for="(err, i) in fieldErrors" :key="i">{{ err }}</li>
+    </ul>
   </div>
 </template>
 
@@ -65,6 +68,10 @@ export default {
     },
     itemSchema() {
       return this.form.resolveSchema(this.schema.items || {});
+    },
+    fieldErrors() {
+      if (!this.form || !this.form.getErrorsForPath) return [];
+      return this.form.getErrorsForPath(this.path);
     },
   },
   methods: {

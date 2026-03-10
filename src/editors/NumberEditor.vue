@@ -1,5 +1,5 @@
 <template>
-  <div class="sf-field">
+  <div class="sf-field" :class="{ errors: fieldErrors.length }">
     <label class="sf-label" :class="{ required: isRequired }">{{ title }}</label>
     <input
       type="number"
@@ -10,6 +10,9 @@
       :value="modelValue != null ? modelValue : ''"
       @input="onInput"
     />
+    <ul v-if="fieldErrors.length" class="errorlist">
+      <li v-for="(err, i) in fieldErrors" :key="i">{{ err }}</li>
+    </ul>
   </div>
 </template>
 
@@ -33,6 +36,10 @@ export default {
       const fieldName = this.path[this.path.length - 1];
       const parentSchema = this.form.getSchemaAtPath(parentPath);
       return parentSchema && Array.isArray(parentSchema.required) && parentSchema.required.includes(fieldName);
+    },
+    fieldErrors() {
+      if (!this.form || !this.form.getErrorsForPath) return [];
+      return this.form.getErrorsForPath(this.path);
     },
   },
   methods: {

@@ -1,5 +1,5 @@
 <template>
-  <div class="sf-field sf-field-boolean">
+  <div class="sf-field sf-field-boolean" :class="{ errors: fieldErrors.length }">
     <label class="sf-checkbox-label">
       <input
         type="checkbox"
@@ -9,6 +9,9 @@
       />
       {{ title }}
     </label>
+    <ul v-if="fieldErrors.length" class="errorlist">
+      <li v-for="(err, i) in fieldErrors" :key="i">{{ err }}</li>
+    </ul>
   </div>
 </template>
 
@@ -25,6 +28,10 @@ export default {
   computed: {
     title() {
       return this.schema.title || this.humanize(this.path[this.path.length - 1]) || '';
+    },
+    fieldErrors() {
+      if (!this.form || !this.form.getErrorsForPath) return [];
+      return this.form.getErrorsForPath(this.path);
     },
   },
   methods: {

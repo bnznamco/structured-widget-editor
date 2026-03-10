@@ -1,5 +1,5 @@
 <template>
-  <div class="sf-field sf-relation" ref="root">
+  <div class="sf-field sf-relation" :class="{ errors: fieldErrors.length }" ref="root">
     <label class="sf-label" :class="{ required: isRequired }">{{ title }}</label>
     <div class="sf-relation-wrapper">
       <!-- Selected items -->
@@ -33,6 +33,9 @@
         </div>
       </div>
     </div>
+    <ul v-if="fieldErrors.length" class="errorlist">
+      <li v-for="(err, i) in fieldErrors" :key="i">{{ err }}</li>
+    </ul>
   </div>
 </template>
 
@@ -86,6 +89,10 @@ export default {
     showSearch() {
       if (!this.isMultiple && this.selected.length > 0) return false;
       return true;
+    },
+    fieldErrors() {
+      if (!this.form || !this.form.getErrorsForPath) return [];
+      return this.form.getErrorsForPath(this.path);
     },
     filteredResults() {
       const selectedIds = new Set(this.selected.map(s => `${s.id}-${s.model || ''}`));

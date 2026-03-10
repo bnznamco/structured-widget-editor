@@ -1,5 +1,5 @@
 <template>
-  <div class="sf-field">
+  <div class="sf-field" :class="{ errors: fieldErrors.length }">
     <label class="sf-label" :class="{ required: isRequired }">{{ title }}</label>
     <textarea
       v-if="isLong"
@@ -17,6 +17,9 @@
       :placeholder="schema.placeholder || ''"
       @input="$emit('update:modelValue', $event.target.value)"
     />
+    <ul v-if="fieldErrors.length" class="errorlist">
+      <li v-for="(err, i) in fieldErrors" :key="i">{{ err }}</li>
+    </ul>
   </div>
 </template>
 
@@ -43,6 +46,10 @@ export default {
     },
     isLong() {
       return this.schema.maxLength > 255 || this.schema.format === 'textarea';
+    },
+    fieldErrors() {
+      if (!this.form || !this.form.getErrorsForPath) return [];
+      return this.form.getErrorsForPath(this.path);
     },
   },
   methods: {

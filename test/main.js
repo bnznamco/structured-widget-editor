@@ -38,6 +38,7 @@ const app = createApp({
     const initialData = ref(undefined);
     const currentValue = ref(null);
     const validation = ref(null);
+    const validationErrors = ref({});
     const statusText = ref('Ready');
 
     // Fetch schema from API
@@ -53,7 +54,6 @@ const app = createApp({
 
     const onFormChange = (val) => {
       currentValue.value = val;
-      validation.value = null;
       statusText.value = `Updated at ${new Date().toLocaleTimeString()}`;
     };
 
@@ -61,6 +61,7 @@ const app = createApp({
       const data = currentValue.value;
       if (!data) {
         validation.value = { valid: false, errors: { _root: ['No data to validate.'] } };
+        validationErrors.value = {};
         return;
       }
       try {
@@ -70,9 +71,11 @@ const app = createApp({
           body: JSON.stringify(data),
         });
         validation.value = await res.json();
+        validationErrors.value = validation.value.valid ? {} : (validation.value.errors || {});
         statusText.value = validation.value.valid ? 'Validation passed' : 'Validation failed';
       } catch (err) {
         validation.value = { valid: false, errors: { _root: [err.message] } };
+        validationErrors.value = {};
         statusText.value = 'Validation error';
       }
     };
@@ -81,6 +84,7 @@ const app = createApp({
       initialData.value = { ...sampleData };
       currentValue.value = { ...sampleData };
       validation.value = null;
+      validationErrors.value = {};
       statusText.value = 'Sample data loaded';
     };
 
@@ -88,6 +92,7 @@ const app = createApp({
       initialData.value = {};
       currentValue.value = {};
       validation.value = null;
+      validationErrors.value = {};
       statusText.value = 'Form reset';
     };
 
@@ -101,6 +106,7 @@ const app = createApp({
       initialData,
       jsonOutput,
       validation,
+      validationErrors,
       statusText,
       onFormChange,
       validateData,

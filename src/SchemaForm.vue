@@ -21,6 +21,7 @@ export default {
   props: {
     schema: { type: [Object, String], default: () => ({}) },
     initialData: { default: undefined },
+    errors: { type: Object, default: () => ({}) },
   },
   emits: ['change'],
   data() {
@@ -40,6 +41,7 @@ export default {
       return {
         resolveSchema: (s) => this.resolveSchema(s),
         getSchemaAtPath: (p) => this.getSchemaAtPath(p),
+        getErrorsForPath: (p) => this.getErrorsForPath(p),
       };
     },
   },
@@ -124,6 +126,12 @@ export default {
     onValueChange(val) {
       this.currentValue = val;
       this.$emit('change', val);
+    },
+
+    getErrorsForPath(path) {
+      if (!this.errors || typeof this.errors !== 'object') return [];
+      const key = path.join('.');
+      return this.errors[key] || [];
     },
 
     getValue() {

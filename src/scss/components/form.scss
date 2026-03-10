@@ -112,6 +112,24 @@
     font-size: 0.75rem;
     margin-top: 2px;
   }
+
+  .errors {
+    .sf-input {
+      border-color: var(--error-fg, #ba2121);
+    }
+  }
+
+  .errorlist {
+    margin: 4px 0 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--error-fg, #ba2121);
+    font-size: 0.75rem;
+
+    li {
+      padding: 2px 0;
+    }
+  }
 }
 
 .form-row {

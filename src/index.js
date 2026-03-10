@@ -23,6 +23,7 @@ export class SchemaFormElement extends HTMLElement {
     this._props = reactive({
       schema: {},
       initialData: undefined,
+      errors: {},
     });
     this._app = null;
     this._mountPoint = null;
@@ -48,6 +49,7 @@ export class SchemaFormElement extends HTMLElement {
         ref: formRef,
         schema: props.schema,
         initialData: props.initialData,
+        errors: props.errors,
         onChange: (val) => {
           this.dispatchEvent(new CustomEvent('change', { detail: val, bubbles: true }));
         },
@@ -87,10 +89,20 @@ export class SchemaFormElement extends HTMLElement {
     this._rerender();
   }
 
+  get errors() {
+    return this._props.errors;
+  }
+
+  set errors(val) {
+    this._propsSet = true;
+    this._props.errors = typeof val === 'string' ? JSON.parse(val) : (val || {});
+    this._rerender();
+  }
+
   // --- Attribute reflection ---
 
   static get observedAttributes() {
-    return ['schema', 'initial-data'];
+    return ['schema', 'initial-data', 'errors'];
   }
 
   attributeChangedCallback(name, oldVal, newVal) {
@@ -99,6 +111,8 @@ export class SchemaFormElement extends HTMLElement {
       this._props.schema = newVal ? JSON.parse(newVal) : {};
     } else if (name === 'initial-data') {
       this._props.initialData = newVal ? JSON.parse(newVal) : undefined;
+    } else if (name === 'errors') {
+      this._props.errors = newVal ? JSON.parse(newVal) : {};
     }
     this._rerender();
   }
@@ -123,6 +137,7 @@ export class SchemaFormElement extends HTMLElement {
         ref: formRef,
         schema: props.schema,
         initialData: props.initialData,
+        errors: props.errors,
         onChange: (val) => {
           this.dispatchEvent(new CustomEvent('change', { detail: val, bubbles: true }));
         },
