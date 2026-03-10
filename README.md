@@ -99,9 +99,42 @@ function onFormChange(value) {
 
 ### As an IIFE (script tag)
 
+#### All-in-one bundle (recommended)
+
+A single `<script>` tag that includes both JS and CSS — no separate stylesheet needed:
+
 ```html
-<link rel="stylesheet" href="dist/structured-widget-editor.css">
-<script src="dist/structured-widget-editor.js"></script>
+<!-- Latest version -->
+<script src="https://bnznamco.github.io/structured-widget-editor/latest/structured-widget-editor.iife.js"></script>
+
+<!-- Pinned version -->
+<script src="https://bnznamco.github.io/structured-widget-editor/v1.0.0/structured-widget-editor.iife.js"></script>
+```
+
+#### Separate JS + CSS
+
+```html
+<!-- Latest version -->
+<link rel="stylesheet" href="https://bnznamco.github.io/structured-widget-editor/latest/structured-widget-editor.css">
+<script src="https://bnznamco.github.io/structured-widget-editor/latest/structured-widget-editor.js"></script>
+
+<!-- Pinned version -->
+<link rel="stylesheet" href="https://bnznamco.github.io/structured-widget-editor/v1.0.0/structured-widget-editor.css">
+<script src="https://bnznamco.github.io/structured-widget-editor/v1.0.0/structured-widget-editor.js"></script>
+```
+
+#### Via jsDelivr (from npm)
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@structured/widget-editor@latest/dist/structured-widget-editor.iife.js"></script>
+<!-- or pinned -->
+<script src="https://cdn.jsdelivr.net/npm/@structured/widget-editor@1.0.0/dist/structured-widget-editor.iife.js"></script>
+```
+
+#### Usage
+
+```html
+<script src="https://bnznamco.github.io/structured-widget-editor/latest/structured-widget-editor.iife.js"></script>
 <script>
   StructuredWidgetEditor.registerCustomElement();
 
