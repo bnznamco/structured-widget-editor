@@ -22,7 +22,6 @@
   ],
   "scripts": {
     "build": "rollup -c && node scripts/bundle-iife.mjs",
-    "build:cdn": "rollup -c && node scripts/bundle-iife.mjs",
     "dev": "rollup -c -w",
     "test:serve": "vite --open"
   },

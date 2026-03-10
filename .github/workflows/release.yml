@@ -37,7 +37,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build (IIFE + CSS + ESM + all-in-one)
-        run: pnpm build:cdn
+        run: pnpm build
 
       - name: Semantic Release
         id: semantic
