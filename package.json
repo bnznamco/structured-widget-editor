@@ -1,6 +1,6 @@
 {
   "name": "@structured-field/widget-editor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A lightweight JSON Schema form builder with support for relation fields (ForeignKey, QuerySet) and autocomplete search.",
   "type": "module",
   "main": "dist/structured-widget-editor.js",

@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/bnznamco/structured-widget-editor/compare/v1.0.0...v1.0.1) (2026-03-11)
+
+
+### Bug Fixes
+
+* add @rollup/plugin-replace to dependencies and configure it in rollup config ([b08481b](https://github.com/bnznamco/structured-widget-editor/commit/b08481be0fea5c7072dc2249da26c5412225961b))
+
 # 1.0.0 (2026-03-10)
 
 
