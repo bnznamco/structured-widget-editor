@@ -1,3 +1,11 @@
+## [1.0.3](https://github.com/bnznamco/structured-widget-editor/compare/v1.0.2...v1.0.3) (2026-03-17)
+
+
+### Bug Fixes
+
+* add npm publish step to release workflow and update semantic release configuration ([2c0ec51](https://github.com/bnznamco/structured-widget-editor/commit/2c0ec516edf784444ac35f710d982ca0ba114288))
+* simplify npm configuration in semantic release setup ([7f6bb05](https://github.com/bnznamco/structured-widget-editor/commit/7f6bb052c97ec201ea8296896d3f1bbedcc4b704))
+
 ## [1.0.2](https://github.com/bnznamco/structured-widget-editor/compare/v1.0.1...v1.0.2) (2026-03-17)
 
 
