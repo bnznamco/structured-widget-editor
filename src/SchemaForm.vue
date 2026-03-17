@@ -24,6 +24,7 @@ export default {
     errors: { type: Object, default: () => ({}) },
   },
   emits: ['change'],
+  expose: ['getValue'],
   data() {
     const parsedSchema = typeof this.schema === 'string' ? JSON.parse(this.schema) : this.schema;
     const defs = parsedSchema.$defs || parsedSchema.definitions || {};

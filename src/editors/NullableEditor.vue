@@ -28,12 +28,16 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from 'vue';
 import { getDefaultForSchema } from '../utils';
+
+import SchemaEditor from './SchemaEditor.vue';
 
 export default {
   name: 'NullableEditor',
-  components: { SchemaEditor: defineAsyncComponent(() => import('./SchemaEditor.vue')) },
+  beforeCreate() {
+    if (!this.$options.components) this.$options.components = {};
+    this.$options.components.SchemaEditor = SchemaEditor;
+  },
   props: {
     schema: { type: Object, required: true },
     modelValue: { default: null },
