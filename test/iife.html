@@ -324,7 +324,7 @@
 
     // Listen for changes via the custom element event
     formEl.addEventListener('change', function (e) {
-      currentValue = e.detail;
+      currentValue = e.detail[0];
       document.getElementById('output-json').textContent = JSON.stringify(currentValue, null, 2);
       document.getElementById('status-bar').textContent = 'Updated at ' + new Date().toLocaleTimeString();
     });
