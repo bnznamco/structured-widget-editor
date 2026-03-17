@@ -1,3 +1,11 @@
+## [1.0.2](https://github.com/bnznamco/structured-widget-editor/compare/v1.0.1...v1.0.2) (2026-03-17)
+
+
+### Bug Fixes
+
+* resolve the circular dependency problem on webcomponent ([972f336](https://github.com/bnznamco/structured-widget-editor/commit/972f336bbd3b89224862712089712444cfee7284))
+* update event detail handling in IIFE example to access first element ([5a0a3cb](https://github.com/bnznamco/structured-widget-editor/commit/5a0a3cbc8adcbcbb092c80023936c639ffde8994))
+
 ## [1.0.1](https://github.com/bnznamco/structured-widget-editor/compare/v1.0.0...v1.0.1) (2026-03-11)
 
 
