@@ -4,10 +4,10 @@
       <label class="sf-label" :class="{ required: isRequired }">{{ title }}</label>
       <button type="button" :class="toggleClass" @click="toggle">
         <template v-if="isNull">
-          <i class="fas fa-plus"></i> Add
+          <SfIcon name="plus" /> Add
         </template>
         <template v-else>
-          <i class="fas fa-times"></i> Remove
+          <SfIcon name="times" /> Remove
         </template>
       </button>
     </div>
@@ -29,6 +29,7 @@
 
 <script>
 import { getDefaultForSchema } from '../utils';
+import SfIcon from './SfIcon.vue';
 
 import SchemaEditor from './SchemaEditor.vue';
 
@@ -37,6 +38,7 @@ export default {
   beforeCreate() {
     if (!this.$options.components) this.$options.components = {};
     this.$options.components.SchemaEditor = SchemaEditor;
+    this.$options.components.SfIcon = SfIcon;
   },
   props: {
     schema: { type: Object, required: true },

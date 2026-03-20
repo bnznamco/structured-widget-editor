@@ -8,7 +8,7 @@
           <span class="sf-relation-tag-text">{{ getDisplayName(item) }}</span>
           <button v-if="isMultiple || allowClear" type="button" class="sf-relation-tag-remove"
             @click.stop="removeItem(item)">
-            <i class="fas fa-times"></i>
+            <SfIcon name="times" />
           </button>
         </div>
       </div>
@@ -41,9 +41,11 @@
 
 <script>
 import { debounce } from '../utils';
+import SfIcon from './SfIcon.vue';
 
 export default {
   name: 'RelationEditor',
+  components: { SfIcon },
   props: {
     schema: { type: Object, required: true },
     modelValue: { default: null },

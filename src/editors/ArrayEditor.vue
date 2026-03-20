@@ -4,7 +4,7 @@
       <span class="sf-label">{{ title }}</span>
       <span class="sf-array-count">{{ items.length }}</span>
       <button type="button" class="sf-btn sf-btn-add" @click="addItem()">
-        <i class="fas fa-plus"></i> Add
+        <SfIcon name="plus" /> Add
       </button>
     </div>
     <div class="sf-array-items">
@@ -13,13 +13,13 @@
           <span class="sf-array-item-index">#{{ index + 1 }}</span>
           <div class="sf-array-item-actions">
             <button v-if="index > 0" type="button" class="sf-btn sf-btn-sm" @click="moveItem(index, -1)">
-              <i class="fas fa-arrow-up"></i>
+              <SfIcon name="arrow-up" />
             </button>
             <button type="button" class="sf-btn sf-btn-sm" @click="moveItem(index, 1)">
-              <i class="fas fa-arrow-down"></i>
+              <SfIcon name="arrow-down" />
             </button>
             <button type="button" class="sf-btn sf-btn-sm sf-btn-danger" @click="removeItem(index)">
-              <i class="fas fa-times"></i>
+              <SfIcon name="times" />
             </button>
           </div>
         </div>
@@ -42,6 +42,7 @@
 
 <script>
 import { getDefaultForSchema } from '../utils';
+import SfIcon from './SfIcon.vue';
 
 let keyCounter = 0;
 
@@ -52,6 +53,7 @@ export default {
   beforeCreate() {
     if (!this.$options.components) this.$options.components = {};
     this.$options.components.SchemaEditor = SchemaEditor;
+    this.$options.components.SfIcon = SfIcon;
   },
   props: {
     schema: { type: Object, required: true },

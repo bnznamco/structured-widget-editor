@@ -4,8 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Structured Widget Editor – Example</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <style>
+    .ico { display: inline-block; width: 14px; height: 14px; vertical-align: -2px; }
+    .ico svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
     :root {
       --body-bg: #fff;
       --body-fg: #333;
@@ -197,26 +198,26 @@
 <body>
   <div id="app">
     <div class="app-header">
-      <i class="fas fa-cube"></i>
+      <span class="ico"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></span>
       <div>
         <h1>Structured Widget Editor</h1>
         <div class="subtitle">Example app with search API &amp; validation</div>
       </div>
       <span style="background:#4caf50;color:#fff;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:700;letter-spacing:.5px">ESM</span>
-      <a href="/iife.html" style="color:rgba(255,255,255,.8);text-decoration:none;font-size:13px;margin-left:auto"><i class="fas fa-arrow-right"></i> IIFE example</a>
+      <a href="/iife.html" style="color:rgba(255,255,255,.8);text-decoration:none;font-size:13px;margin-left:auto"><span class="ico"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span> IIFE example</a>
     </div>
 
     <div class="app-layout">
       <!-- Left panel: Form -->
       <div class="panel">
         <div class="panel-header">
-          <h2><i class="fas fa-edit"></i>&nbsp; Book Editor</h2>
+          <h2><span class="ico"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>&nbsp; Book Editor</h2>
           <div class="actions">
             <button class="btn btn-outline" @click="loadSampleData">
-              <i class="fas fa-fill-drip"></i> Load Sample
+              <span class="ico"><svg viewBox="0 0 24 24"><path d="M12 2v6l3-3M12 8l-3-3"/><rect x="3" y="11" width="18" height="10" rx="2"/></svg></span> Load Sample
             </button>
             <button class="btn btn-danger" @click="resetForm">
-              <i class="fas fa-undo"></i> Reset
+              <span class="ico"><svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 105.64-11.36L1 10"/></svg></span> Reset
             </button>
           </div>
         </div>
@@ -234,13 +235,13 @@
       <!-- Right panel: Output -->
       <div class="panel">
         <div class="panel-header">
-          <h2><i class="fas fa-code"></i>&nbsp; JSON Output</h2>
+          <h2><span class="ico"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>&nbsp; JSON Output</h2>
           <div class="actions">
             <button class="btn btn-primary" @click="validateData">
-              <i class="fas fa-check-circle"></i> Validate
+              <span class="ico"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span> Validate
             </button>
             <button class="btn btn-outline" @click="copyJSON">
-              <i class="fas fa-copy"></i> Copy
+              <span class="ico"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></span> Copy
             </button>
           </div>
         </div>
@@ -248,10 +249,10 @@
           <pre id="output-json">{{ jsonOutput }}</pre>
           <div v-if="validation" class="validation-result" :class="validation.valid ? 'valid' : 'invalid'">
             <template v-if="validation.valid">
-              <i class="fas fa-check-circle"></i> Data is valid!
+              <span class="ico"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span> Data is valid!
             </template>
             <template v-else>
-              <i class="fas fa-exclamation-circle"></i> <strong>Validation failed</strong>
+              <span class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span> <strong>Validation failed</strong>
               <ul>
                 <li v-for="(msgs, path) in validation.errors" :key="path">
                   <strong>{{ path }}</strong>: <span v-for="(msg, i) in msgs" :key="i">{{ msg }}</span>
