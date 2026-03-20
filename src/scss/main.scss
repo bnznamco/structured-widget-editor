@@ -1,3 +1,3 @@
-@import './components/form.scss';
-@import './components/editors.scss';
-@import './components/relation.scss';
+@use './components/form';
+@use './components/editors';
+@use './components/relation';
