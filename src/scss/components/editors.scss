@@ -94,6 +94,19 @@
     }
   }
 
+  .sf-array-collapse-toggle {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    color: var(--body-quiet-color, #aaa);
+    line-height: 0;
+
+    &:hover {
+      color: var(--body-fg, #333);
+    }
+  }
+
   .sf-array-count {
     display: inline-flex;
     align-items: center;

@@ -82,6 +82,12 @@ export default {
       if (!str) return '';
       return str.replace(/_/g, ' ').replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, s => s.toUpperCase());
     },
+    collapse() {
+      this.collapsed = true;
+    },
+    expand() {
+      this.collapsed = false;
+    },
     onChildChange(key, value) {
       const newVal = { ...(this.modelValue || {}), [key]: value };
       this.$emit('update:modelValue', newVal);

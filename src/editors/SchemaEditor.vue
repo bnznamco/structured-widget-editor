@@ -1,5 +1,6 @@
 <template>
   <component
+    ref="editor"
     :is="editorComponent"
     :schema="schema"
     :model-value="modelValue"
@@ -44,6 +45,18 @@ export default {
     form: { type: Object, required: true },
   },
   emits: ['update:modelValue'],
+  methods: {
+    collapseAll() {
+      const editor = this.$refs.editor;
+      if (editor?.collapse) editor.collapse();
+      if (editor?.collapseAll) editor.collapseAll();
+    },
+    expandAll() {
+      const editor = this.$refs.editor;
+      if (editor?.expand) editor.expand();
+      if (editor?.expandAll) editor.expandAll();
+    },
+  },
   computed: {
     editorComponent() {
       const schema = this.schema;

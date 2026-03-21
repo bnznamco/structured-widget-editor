@@ -6,6 +6,9 @@
       <button type="button" class="sf-btn sf-btn-add" @click="addItem()">
         <SfIcon name="plus" /> Add
       </button>
+      <span v-if="items.length" class="sf-array-collapse-toggle" :title="allCollapsed ? 'Expand all' : 'Collapse all'" @click="toggleCollapseAll">
+        <SfIcon :name="allCollapsed ? 'chevron-down' : 'chevron-up'" />
+      </span>
     </div>
     <div class="sf-array-items">
       <div
@@ -39,6 +42,7 @@
         </div>
         <div class="sf-array-item-body" @dragover.prevent @drop.prevent="onDrop(index)">
           <SchemaEditor
+            ref="itemEditors"
             :schema="itemSchema"
             :model-value="item.value"
             :path="[...path, String(index)]"
@@ -82,6 +86,7 @@ export default {
       items: arr.map(v => ({ _key: keyCounter++, value: v })),
       dragSourceIndex: null,
       dragOverIndex: null,
+      allCollapsed: false,
     };
   },
   computed: {
@@ -148,6 +153,17 @@ export default {
     onDragEnd() {
       this.dragSourceIndex = null;
       this.dragOverIndex = null;
+    },
+    toggleCollapseAll() {
+      this.allCollapsed = !this.allCollapsed;
+      const editors = this.$refs.itemEditors;
+      if (!editors) return;
+      const list = Array.isArray(editors) ? editors : [editors];
+      if (this.allCollapsed) {
+        list.forEach(editor => editor?.collapseAll?.());
+      } else {
+        list.forEach(editor => editor?.expandAll?.());
+      }
     },
     emitValue() {
       this.$emit('update:modelValue', this.items.map(i => i.value));
