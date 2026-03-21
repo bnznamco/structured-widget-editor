@@ -97,8 +97,8 @@ export default {
       return this.form.getErrorsForPath(this.path);
     },
     filteredResults() {
-      const selectedIds = new Set(this.selected.map(s => `${s.id}-${s.model || ''}`));
-      return this.searchResults.filter(item => !selectedIds.has(`${item.id}-${item.model || ''}`));
+      const selectedIds = new Set(this.selected.map(item => this.itemKey(item)));
+      return this.searchResults.filter(item => !selectedIds.has(this.itemKey(item)));
     },
   },
   created() {
