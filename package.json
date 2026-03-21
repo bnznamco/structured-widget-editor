@@ -5,6 +5,10 @@
   "type": "module",
   "main": "dist/structured-widget-editor.js",
   "module": "dist/structured-widget-editor.esm.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bnznamco/structured-widget-editor"
+  },
   "exports": {
     ".": {
       "import": "./dist/structured-widget-editor.esm.js",
