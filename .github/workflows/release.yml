@@ -55,7 +55,7 @@ jobs:
 
       - name: Resolve publish version
         id: version
-        if: steps.semantic.outputs.new_release_published == 'true' || inputs.force_publish == 'true'
+        if: steps.semantic.outputs.new_release_published == 'true' || fromJSON(inputs.force_publish)
         run: |
           VERSION="${{ steps.semantic.outputs.new_release_version }}"
           if [ -z "$VERSION" ]; then
@@ -64,11 +64,11 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Publish to npm (OIDC Trusted Publishing)
-        if: steps.semantic.outputs.new_release_published == 'true' || inputs.force_publish == 'true'
+        if: steps.semantic.outputs.new_release_published == 'true' || inputs.force_publish
         run: npm publish --provenance --access public
 
       - name: Prepare CDN directory
-        if: steps.semantic.outputs.new_release_published == 'true' || inputs.force_publish == 'true'
+        if: steps.semantic.outputs.new_release_published == 'true' || inputs.force_publish
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           mkdir -p cdn/v${VERSION} cdn/latest
@@ -85,7 +85,7 @@ jobs:
           cp dist/structured-widget-editor.esm.js  cdn/latest/
 
       - name: Deploy to GitHub Pages
-        if: steps.semantic.outputs.new_release_published == 'true' || inputs.force_publish == 'true'
+        if: steps.semantic.outputs.new_release_published == 'true' || fromJSON(inputs.force_publish)
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
