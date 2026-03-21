@@ -2,6 +2,11 @@ name: Release
 
 on:
   workflow_dispatch:
+    inputs:
+      force_publish:
+        description: 'Force npm publish and CDN deploy even if no new release was detected (use to recover from a failed publish)'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -48,14 +53,24 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Resolve publish version
+        id: version
+        if: steps.semantic.outputs.new_release_published == 'true' || inputs.force_publish == 'true'
+        run: |
+          VERSION="${{ steps.semantic.outputs.new_release_version }}"
+          if [ -z "$VERSION" ]; then
+            VERSION=$(node -p "require('./package.json').version")
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
       - name: Publish to npm (OIDC Trusted Publishing)
-        if: steps.semantic.outputs.new_release_published == 'true'
+        if: steps.semantic.outputs.new_release_published == 'true' || inputs.force_publish == 'true'
         run: npm publish --provenance --access public
 
       - name: Prepare CDN directory
-        if: steps.semantic.outputs.new_release_published == 'true'
+        if: steps.semantic.outputs.new_release_published == 'true' || inputs.force_publish == 'true'
         run: |
-          VERSION="${{ steps.semantic.outputs.new_release_version }}"
+          VERSION="${{ steps.version.outputs.version }}"
           mkdir -p cdn/v${VERSION} cdn/latest
 
           # Copy dist artifacts into versioned and latest directories
@@ -70,7 +85,7 @@ jobs:
           cp dist/structured-widget-editor.esm.js  cdn/latest/
 
       - name: Deploy to GitHub Pages
-        if: steps.semantic.outputs.new_release_published == 'true'
+        if: steps.semantic.outputs.new_release_published == 'true' || inputs.force_publish == 'true'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
