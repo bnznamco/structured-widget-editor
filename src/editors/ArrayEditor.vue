@@ -32,7 +32,7 @@
             <button v-if="index > 0" type="button" class="sf-btn sf-btn-sm" @click="moveItem(index, -1)">
               <SfIcon name="arrow-up" />
             </button>
-            <button type="button" class="sf-btn sf-btn-sm" @click="moveItem(index, 1)">
+            <button v-if="index < items.length - 1" type="button" class="sf-btn sf-btn-sm" @click="moveItem(index, 1)">
               <SfIcon name="arrow-down" />
             </button>
             <button type="button" class="sf-btn sf-btn-sm sf-btn-danger" @click="removeItem(index)">
