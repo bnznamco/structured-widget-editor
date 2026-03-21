@@ -1,3 +1,13 @@
+# [1.1.0](https://github.com/bnznamco/structured-widget-editor/compare/v1.0.3...v1.1.0) (2026-03-21)
+
+
+### Features
+
+* add collapse/expand functionality to ArrayEditor and ObjectEditor with visual toggle ([0aa75ec](https://github.com/bnznamco/structured-widget-editor/commit/0aa75ec0cf35b4fb861b8bc5a4896e233cd8d1b1))
+* enhance ObjectEditor with collapsible sections and summary display ([8e3589f](https://github.com/bnznamco/structured-widget-editor/commit/8e3589fa4caa7797cbdedd6b729427660edc0d31))
+* enhance sf-select styling with custom appearance and background icon ([a2e7b4b](https://github.com/bnznamco/structured-widget-editor/commit/a2e7b4b4b12e685fcd1f240c11afa7803095345c))
+* implement drag-and-drop functionality in ArrayEditor with visual feedback ([f246406](https://github.com/bnznamco/structured-widget-editor/commit/f246406ae5d1dc390baf63e11c3c8341e69f5bb0))
+
 ## [1.0.3](https://github.com/bnznamco/structured-widget-editor/compare/v1.0.2...v1.0.3) (2026-03-17)
 
 
