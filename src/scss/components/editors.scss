@@ -21,15 +21,56 @@
       padding: 12px;
       margin-bottom: 12px;
       background: var(--body-bg, #fff);
+
+      &.sf-object-collapsed {
+        padding: 0;
+      }
     }
   }
 
   .sf-object-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     font-weight: 600;
     font-size: 0.8125rem;
     color: var(--body-fg, #333);
     text-transform: capitalize;
     padding: 0 4px;
+  }
+
+  .sf-object-title-text {
+    flex-shrink: 0;
+  }
+
+  .sf-object-summary {
+    font-weight: 400;
+    font-size: 0.75rem;
+    color: var(--body-quiet-color, #888);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 240px;
+  }
+
+  .sf-collapse-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: var(--body-quiet-color, #888);
+    border-radius: 3px;
+    flex-shrink: 0;
+
+    &:hover {
+      background: var(--darkened-bg, #f0f0f0);
+      color: var(--body-fg, #333);
+    }
   }
 
   .sf-object-fields {

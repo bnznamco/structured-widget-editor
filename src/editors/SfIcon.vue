@@ -17,6 +17,12 @@
       <line x1="12" y1="5" x2="12" y2="19" />
       <polyline points="19 12 12 19 5 12" />
     </template>
+    <template v-else-if="name === 'chevron-down'">
+      <polyline points="6 9 12 15 18 9" />
+    </template>
+    <template v-else-if="name === 'chevron-up'">
+      <polyline points="18 15 12 9 6 15" />
+    </template>
   </svg>
 </template>
 
