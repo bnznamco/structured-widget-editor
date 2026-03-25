@@ -22,9 +22,15 @@ export default {
     schema: { type: [Object, String], default: () => ({}) },
     initialData: { default: undefined },
     errors: { type: Object, default: () => ({}) },
+    customEditors: { type: Array, default: () => [] },
   },
   emits: ['change'],
   expose: ['getValue'],
+  provide() {
+    return {
+      customEditors: () => this.customEditors,
+    };
+  },
   data() {
     const parsedSchema = typeof this.schema === 'string' ? JSON.parse(this.schema) : this.schema;
     const defs = parsedSchema.$defs || parsedSchema.definitions || {};

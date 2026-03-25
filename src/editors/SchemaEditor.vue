@@ -38,6 +38,9 @@ export default {
     UnionEditor,
     RelationEditor,
   },
+  inject: {
+    customEditors: { default: () => () => [] },
+  },
   props: {
     schema: { type: Object, required: true },
     modelValue: { default: undefined },
@@ -62,6 +65,11 @@ export default {
       const schema = this.schema;
 
       if (this.path.length > MAX_DEPTH) return 'StringEditor';
+
+      const overrides = this.customEditors();
+      for (const override of overrides) {
+        if (override.match(schema, this.path)) return override.component;
+      }
 
       if (schema.type === 'relation') return 'RelationEditor';
       if (schema.oneOf && schema.discriminator) return 'UnionEditor';

@@ -197,6 +197,114 @@ Query parameters sent: `_q` (search term), `page` (pagination).
 | `oneOf + discriminator` | UnionEditor | Type selector |
 | `relation` | RelationEditor | Autocomplete with search |
 
+## Custom Editors
+
+You can override the editor used for any field by passing a `customEditors` array to `SchemaForm`. Each entry defines a `match` condition and the `component` to render when that condition is true. Overrides are evaluated **before** the built-in resolution logic, in order — the first match wins.
+
+### Vue component
+
+```vue
+<template>
+  <SchemaForm :schema="schema" :custom-editors="customEditors" />
+</template>
+
+<script setup>
+import { SchemaForm } from '@structured-field/widget-editor';
+import MyDatePicker from './MyDatePicker.vue';
+import MyColorPicker from './MyColorPicker.vue';
+
+const customEditors = [
+  // Match by schema format
+  { match: (schema) => schema.format === 'date', component: MyDatePicker },
+  // Match by field name (last segment of the path)
+  { match: (schema, path) => path.at(-1) === 'color', component: MyColorPicker },
+  // Match by a custom schema property
+  { match: (schema) => schema['x-widget'] === 'rich-text', component: MyRichText },
+];
+</script>
+```
+
+### Web Component
+
+```js
+const el = document.querySelector('schema-form');
+
+el.customEditors = [
+  { match: (schema) => schema.format === 'date', component: MyDatePicker },
+];
+```
+
+### Custom editor API
+
+A custom editor component must accept the following props and emit `update:modelValue` to write values back. **Never mutate `modelValue` directly.**
+
+| Prop | Type | Description |
+|---|---|---|
+| `schema` | `Object` | The resolved JSON Schema for this field |
+| `modelValue` | `any` | Current field value — read-only |
+| `path` | `string[]` | Path segments from the root (`['address', 'city']`) |
+| `form` | `Object` | Form API: `getSchemaAtPath(path)`, `getErrorsForPath(path)`, `resolveSchema(schema)` |
+
+| Emit | Payload | Description |
+|---|---|---|
+| `update:modelValue` | new value | The only way to write a value back to the form |
+
+### Starter template
+
+Copy and adapt this component as a starting point:
+
+```vue
+<template>
+  <div class="sf-field" :class="{ errors: fieldErrors.length }">
+    <label class="sf-label" :class="{ required: isRequired }">{{ title }}</label>
+
+    <!-- Replace this with your custom input -->
+    <input
+      type="text"
+      class="sf-input"
+      :value="modelValue"
+      @input="$emit('update:modelValue', $event.target.value)"
+    />
+
+    <ul v-if="fieldErrors.length" class="errorlist">
+      <li v-for="(err, i) in fieldErrors" :key="i">{{ err }}</li>
+    </ul>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'MyCustomEditor',
+  props: {
+    schema:     { type: Object, required: true },
+    modelValue: { default: undefined },
+    path:       { type: Array,  default: () => [] },
+    form:       { type: Object, default: null },
+  },
+  emits: ['update:modelValue'],
+  computed: {
+    title() {
+      return this.schema.title || this.humanize(this.path.at(-1)) || '';
+    },
+    isRequired() {
+      if (this.path.length < 2 || !this.form) return false;
+      const parentSchema = this.form.getSchemaAtPath(this.path.slice(0, -1));
+      return Array.isArray(parentSchema?.required) && parentSchema.required.includes(this.path.at(-1));
+    },
+    fieldErrors() {
+      return this.form?.getErrorsForPath?.(this.path) ?? [];
+    },
+  },
+  methods: {
+    humanize(str) {
+      if (!str) return '';
+      return str.replace(/_/g, ' ').replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, s => s.toUpperCase());
+    },
+  },
+};
+</script>
+```
+
 ## Theming
 
 All styles use CSS custom properties with sensible defaults. Override them to match your design system:
