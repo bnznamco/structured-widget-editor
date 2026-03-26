@@ -1,5 +1,16 @@
 <template>
+  <WebComponentWrapper
+    v-if="isWebComponent"
+    ref="editor"
+    :tag-name="editorComponent"
+    :schema="schema"
+    :model-value="modelValue"
+    :path="path"
+    :form="form"
+    @update:model-value="$emit('update:modelValue', $event)"
+  />
   <component
+    v-else
     ref="editor"
     :is="editorComponent"
     :schema="schema"
@@ -21,6 +32,7 @@ import ArrayEditor from './ArrayEditor.vue';
 import NullableEditor from './NullableEditor.vue';
 import UnionEditor from './UnionEditor.vue';
 import RelationEditor from './RelationEditor.vue';
+import WebComponentWrapper from './WebComponentWrapper.vue';
 
 const MAX_DEPTH = 12;
 
@@ -37,6 +49,7 @@ export default {
     NullableEditor,
     UnionEditor,
     RelationEditor,
+    WebComponentWrapper,
   },
   inject: {
     customEditors: { default: () => () => [] },
@@ -61,6 +74,10 @@ export default {
     },
   },
   computed: {
+    isWebComponent() {
+      const c = this.editorComponent;
+      return typeof c === 'string' && c.includes('-');
+    },
     editorComponent() {
       const schema = this.schema;
 

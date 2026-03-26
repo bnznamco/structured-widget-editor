@@ -12,6 +12,7 @@ export { default as ArrayEditor } from './editors/ArrayEditor.vue';
 export { default as NullableEditor } from './editors/NullableEditor.vue';
 export { default as UnionEditor } from './editors/UnionEditor.vue';
 export { default as RelationEditor } from './editors/RelationEditor.vue';
+export { default as WebComponentWrapper } from './editors/WebComponentWrapper.vue';
 
 import { defineCustomElement } from 'vue';
 import SchemaFormComponent from './SchemaForm.vue';

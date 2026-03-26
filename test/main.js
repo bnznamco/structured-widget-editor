@@ -58,6 +58,88 @@ const PriceEditor = {
   `,
 };
 
+// ── Web Component custom editor example ─────────────────────────────────────
+// Demonstrates using a native custom element as a custom editor.
+// The editor receives schema, modelValue, path, form as JS properties
+// and dispatches a 'change' CustomEvent with the new value as detail.
+class NotesEditor extends HTMLElement {
+  constructor() {
+    super();
+    this._schema = {};
+    this._modelValue = '';
+    this._path = [];
+    this._form = null;
+    this._textarea = null;
+  }
+
+  connectedCallback() {
+    this._render();
+  }
+
+  set schema(v)     { this._schema = v; this._updateLabel(); }
+  get schema()       { return this._schema; }
+  set modelValue(v)  { this._modelValue = v; this._updateValue(); }
+  get modelValue()   { return this._modelValue; }
+  set path(v)        { this._path = v; }
+  get path()         { return this._path; }
+  set form(v)        { this._form = v; }
+  get form()         { return this._form; }
+
+  _render() {
+    this.innerHTML = '';
+    const container = document.createElement('div');
+    container.className = 'sf-field';
+
+    const label = document.createElement('label');
+    label.className = 'sf-label';
+    label.textContent = this._schema?.title || 'Notes';
+    this._label = label;
+
+    const textarea = document.createElement('textarea');
+    textarea.className = 'sf-input';
+    textarea.rows = 4;
+    textarea.placeholder = 'Write your notes here…';
+    textarea.value = this._modelValue || '';
+    textarea.style.cssText = 'width:100%;resize:vertical;font-family:inherit';
+    this._textarea = textarea;
+
+    const charCount = document.createElement('div');
+    charCount.style.cssText = 'font-size:12px;color:var(--body-quiet-color);text-align:right;margin-top:4px';
+    this._charCount = charCount;
+    this._updateCharCount();
+
+    textarea.addEventListener('input', () => {
+      this._modelValue = textarea.value;
+      this._updateCharCount();
+      this.dispatchEvent(new CustomEvent('change', { detail: textarea.value }));
+    });
+
+    container.appendChild(label);
+    container.appendChild(textarea);
+    container.appendChild(charCount);
+    this.appendChild(container);
+  }
+
+  _updateLabel() {
+    if (this._label) this._label.textContent = this._schema?.title || 'Notes';
+  }
+
+  _updateValue() {
+    if (this._textarea && this._textarea.value !== (this._modelValue || '')) {
+      this._textarea.value = this._modelValue || '';
+      this._updateCharCount();
+    }
+  }
+
+  _updateCharCount() {
+    if (this._charCount) {
+      const len = (this._modelValue || '').length;
+      this._charCount.textContent = `${len} character${len !== 1 ? 's' : ''}`;
+    }
+  }
+}
+customElements.define('notes-editor', NotesEditor);
+
 const sampleData = {
   title: 'One Hundred Years of Solitude',
   isbn: '978-0-06-088328-7',
@@ -99,6 +181,7 @@ const app = createApp({
 
     const customEditors = [
       { match: (s, path) => path.at(-1) === 'price', component: PriceEditor },
+      { match: (s, path) => path.at(-1) === 'notes', component: 'notes-editor' },
     ];
 
     // Fetch schema from API
