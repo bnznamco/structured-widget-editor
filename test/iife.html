@@ -267,6 +267,7 @@
     </div>
   </div>
 
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <!-- Load the IIFE bundle (includes Vue + CSS) -->
   <script src="/dist/structured-widget-editor.iife.js"></script>
   <script>
@@ -274,6 +275,63 @@
     // Register the <schema-form> custom element from the IIFE global
     // -----------------------------------------------------------------------
     StructuredWidgetEditor.registerCustomElement('schema-form');
+
+    // -----------------------------------------------------------------------
+    // Custom editor example (render-function style, no template compiler needed)
+    // Overrides the built-in NumberEditor for the "price" field with a
+    // combined number input + range slider that shows a currency prefix.
+    // -----------------------------------------------------------------------
+    var h = Vue.h;
+    var defineComponent = Vue.defineComponent;
+
+    var PriceEditor = defineComponent({
+      name: 'PriceEditor',
+      props: {
+        schema:     { type: Object, required: true },
+        modelValue: { default: 0 },
+        path:       { type: Array,  default: function() { return []; } },
+        form:       { type: Object, default: null },
+      },
+      emits: ['update:modelValue'],
+      setup: function(props, ctx) {
+        function onInput(e) {
+          ctx.emit('update:modelValue', parseFloat(e.target.value) || 0);
+        }
+        return function() {
+          var errors = props.form && props.form.getErrorsForPath ? props.form.getErrorsForPath(props.path) : [];
+          return h('div', { class: ['sf-field', errors.length ? 'errors' : ''] }, [
+            h('label', { class: 'sf-label' }, props.schema.title || 'Price'),
+            h('div', { style: 'display:flex;align-items:center;gap:10px' }, [
+              h('span', { style: 'font-weight:600;color:var(--body-quiet-color)' }, '€'),
+              h('input', {
+                type: 'number',
+                class: 'sf-input',
+                step: '0.01',
+                min: props.schema.minimum != null ? String(props.schema.minimum) : undefined,
+                value: props.modelValue,
+                onInput: onInput,
+                style: 'max-width:100px',
+              }),
+              h('input', {
+                type: 'range',
+                min: props.schema.minimum != null ? String(props.schema.minimum) : '0',
+                max: props.schema.maximum != null ? String(props.schema.maximum) : '200',
+                step: '0.01',
+                value: props.modelValue,
+                onInput: onInput,
+                style: 'flex:1',
+              }),
+              h('span', { style: 'font-size:13px;color:var(--body-quiet-color);min-width:48px;text-align:right' },
+                '€ ' + (props.modelValue || 0).toFixed(2)
+              ),
+            ]),
+            errors.length ? h('ul', { class: 'errorlist' },
+              errors.map(function(err, i) { return h('li', { key: i }, err); })
+            ) : null,
+          ]);
+        };
+      },
+    });
 
     // -----------------------------------------------------------------------
     // Sample data
@@ -312,6 +370,10 @@
     // -----------------------------------------------------------------------
     var currentValue = null;
     var formEl = document.createElement('schema-form');
+
+    formEl.customEditors = [
+      { match: function(schema, path) { return path[path.length - 1] === 'price'; }, component: PriceEditor },
+    ];
 
     document.getElementById('form-container').appendChild(formEl);
 

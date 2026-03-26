@@ -2,6 +2,62 @@ import { createApp, ref, shallowRef, computed } from 'vue';
 import { SchemaForm } from '@structured-field/widget-editor';
 import '@structured-field/widget-editor/scss';
 
+// ── Custom editor example ────────────────────────────────────────────────────
+// Overrides the built-in NumberEditor for the "price" field with a
+// combined number input + range slider that shows a currency prefix.
+const PriceEditor = {
+  name: 'PriceEditor',
+  props: {
+    schema:     { type: Object, required: true },
+    modelValue: { default: 0 },
+    path:       { type: Array,  default: () => [] },
+    form:       { type: Object, default: null },
+  },
+  emits: ['update:modelValue'],
+  computed: {
+    fieldErrors() {
+      return this.form?.getErrorsForPath?.(this.path) ?? [];
+    },
+  },
+  methods: {
+    onInput(e) {
+      this.$emit('update:modelValue', parseFloat(e.target.value) || 0);
+    },
+  },
+  template: `
+    <div class="sf-field" :class="{ errors: fieldErrors.length }">
+      <label class="sf-label">{{ schema.title }}</label>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-weight:600;color:var(--body-quiet-color)">€</span>
+        <input
+          type="number"
+          class="sf-input"
+          step="0.01"
+          :min="schema.minimum != null ? schema.minimum : undefined"
+          :value="modelValue"
+          @input="onInput"
+          style="max-width:100px"
+        />
+        <input
+          type="range"
+          :min="schema.minimum != null ? schema.minimum : 0"
+          :max="schema.maximum != null ? schema.maximum : 200"
+          step="0.01"
+          :value="modelValue"
+          @input="onInput"
+          style="flex:1"
+        />
+        <span style="font-size:13px;color:var(--body-quiet-color);min-width:48px;text-align:right">
+          € {{ (modelValue || 0).toFixed(2) }}
+        </span>
+      </div>
+      <ul v-if="fieldErrors.length" class="errorlist">
+        <li v-for="(err, i) in fieldErrors" :key="i">{{ err }}</li>
+      </ul>
+    </div>
+  `,
+};
+
 const sampleData = {
   title: 'One Hundred Years of Solitude',
   isbn: '978-0-06-088328-7',
@@ -40,6 +96,10 @@ const app = createApp({
     const validation = ref(null);
     const validationErrors = ref({});
     const statusText = ref('Ready');
+
+    const customEditors = [
+      { match: (s, path) => path.at(-1) === 'price', component: PriceEditor },
+    ];
 
     // Fetch schema from API
     fetch('/api/schema')
@@ -104,6 +164,7 @@ const app = createApp({
     return {
       schema,
       initialData,
+      customEditors,
       jsonOutput,
       validation,
       validationErrors,
