@@ -224,19 +224,29 @@ const customEditors = [
 </script>
 ```
 
-### Web Component
+### Web Component (custom element)
 
 ```js
 const el = document.querySelector('schema-form');
 
 el.customEditors = [
+  // Vue component — pass the component object
   { match: (schema) => schema.format === 'date', component: MyDatePicker },
+  // Web Component — pass the tag name as a string
+  { match: (schema, path) => path.at(-1) === 'color', component: 'my-color-picker' },
 ];
 ```
 
+When `component` is a **string containing a hyphen**, it is treated as a web component tag name. The editor wrapper will:
+
+- Set `schema`, `modelValue`, `path`, and `form` as **JS properties** on the element (not HTML attributes)
+- Listen for `change` or `update:model-value` `CustomEvent`s to receive the new value
+
 ### Custom editor API
 
-A custom editor component must accept the following props and emit `update:modelValue` to write values back. **Never mutate `modelValue` directly.**
+#### Vue component
+
+A custom editor Vue component must accept the following props and emit `update:modelValue` to write values back. **Never mutate `modelValue` directly.**
 
 | Prop | Type | Description |
 |---|---|---|
@@ -249,7 +259,24 @@ A custom editor component must accept the following props and emit `update:model
 |---|---|---|
 | `update:modelValue` | new value | The only way to write a value back to the form |
 
-### Starter template
+#### Web Component
+
+A custom editor web component receives the same data as **JS properties** and dispatches a `change` `CustomEvent` with the new value as `detail`:
+
+| Property | Type | Description |
+|---|---|---|
+| `schema` | `Object` | The resolved JSON Schema for this field |
+| `modelValue` | `any` | Current field value — read-only |
+| `path` | `string[]` | Path segments from the root |
+| `form` | `Object` | Form API: `getSchemaAtPath(path)`, `getErrorsForPath(path)`, `resolveSchema(schema)` |
+
+| Event | Detail | Description |
+|---|---|---|
+| `change` | new value | Dispatched to write a value back to the form |
+
+### Starter templates
+
+#### Vue component
 
 Copy and adapt this component as a starting point:
 
@@ -304,6 +331,85 @@ export default {
 };
 </script>
 ```
+
+#### Web Component (using `BaseEditorElement`)
+
+The `BaseEditorElement` base class handles the property contract for you. Override `render()` to build the initial DOM and `update()` to react to property changes. Use `this.emitChange(value)` to send values back and `this.getErrors()` to read validation errors.
+
+**ESM:**
+
+```js
+import { BaseEditorElement } from '@structured-field/widget-editor';
+
+class MyColorPicker extends BaseEditorElement {
+  render() {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'sf-field';
+
+    const label = document.createElement('label');
+    label.className = 'sf-label';
+    label.textContent = this.schema?.title || 'Color';
+    this._label = label;
+
+    const input = document.createElement('input');
+    input.type = 'color';
+    input.className = 'sf-input';
+    input.value = this.modelValue || '#000000';
+    input.addEventListener('input', () => this.emitChange(input.value));
+    this._input = input;
+
+    wrapper.appendChild(label);
+    wrapper.appendChild(input);
+    this.appendChild(wrapper);
+  }
+
+  update() {
+    if (this._label) this._label.textContent = this.schema?.title || 'Color';
+    if (this._input) this._input.value = this.modelValue || '#000000';
+  }
+}
+
+customElements.define('my-color-picker', MyColorPicker);
+```
+
+**IIFE:**
+
+```html
+<script src="https://bnznamco.github.io/structured-widget-editor/latest/structured-widget-editor.iife.js"></script>
+<script>
+  var BaseEditorElement = StructuredWidgetEditor.BaseEditorElement;
+
+  class MyColorPicker extends BaseEditorElement {
+    render() {
+      var input = document.createElement('input');
+      input.type = 'color';
+      input.value = this.modelValue || '#000000';
+      input.addEventListener('input', () => this.emitChange(input.value));
+      this._input = input;
+      this.appendChild(input);
+    }
+
+    update() {
+      if (this._input) this._input.value = this.modelValue || '#000000';
+    }
+  }
+
+  customElements.define('my-color-picker', MyColorPicker);
+</script>
+```
+
+#### `BaseEditorElement` API
+
+| Property / Method | Description |
+|---|---|
+| `this.schema` | The resolved JSON Schema for this field |
+| `this.modelValue` | Current field value (read-only) |
+| `this.path` | Path segments from the root |
+| `this.form` | Form API object |
+| `this.emitChange(value)` | Dispatch the new value back to the form |
+| `this.getErrors()` | Returns `string[]` of validation errors for this field |
+| `render()` | **Override.** Called once when connected — build the DOM here |
+| `update()` | **Override.** Called on every property change after `render()` |
 
 ## Theming
 

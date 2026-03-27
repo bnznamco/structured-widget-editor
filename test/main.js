@@ -1,5 +1,5 @@
 import { createApp, ref, shallowRef, computed } from 'vue';
-import { SchemaForm } from '@structured-field/widget-editor';
+import { SchemaForm, BaseEditorElement } from '@structured-field/widget-editor';
 import '@structured-field/widget-editor/scss';
 
 // ── Custom editor example ────────────────────────────────────────────────────
@@ -59,81 +59,50 @@ const PriceEditor = {
 };
 
 // ── Web Component custom editor example ─────────────────────────────────────
-// Demonstrates using a native custom element as a custom editor.
-// The editor receives schema, modelValue, path, form as JS properties
-// and dispatches a 'change' CustomEvent with the new value as detail.
-class NotesEditor extends HTMLElement {
-  constructor() {
-    super();
-    this._schema = {};
-    this._modelValue = '';
-    this._path = [];
-    this._form = null;
-    this._textarea = null;
-  }
-
-  connectedCallback() {
-    this._render();
-  }
-
-  set schema(v)     { this._schema = v; this._updateLabel(); }
-  get schema()       { return this._schema; }
-  set modelValue(v)  { this._modelValue = v; this._updateValue(); }
-  get modelValue()   { return this._modelValue; }
-  set path(v)        { this._path = v; }
-  get path()         { return this._path; }
-  set form(v)        { this._form = v; }
-  get form()         { return this._form; }
-
-  _render() {
-    this.innerHTML = '';
+// Demonstrates using BaseEditorElement to create a web component custom editor.
+// Only render() and update() need to be implemented.
+class NotesEditor extends BaseEditorElement {
+  render() {
     const container = document.createElement('div');
     container.className = 'sf-field';
 
-    const label = document.createElement('label');
-    label.className = 'sf-label';
-    label.textContent = this._schema?.title || 'Notes';
-    this._label = label;
+    this._label = document.createElement('label');
+    this._label.className = 'sf-label';
+    this._label.textContent = this.schema?.title || 'Notes';
 
-    const textarea = document.createElement('textarea');
-    textarea.className = 'sf-input';
-    textarea.rows = 4;
-    textarea.placeholder = 'Write your notes here…';
-    textarea.value = this._modelValue || '';
-    textarea.style.cssText = 'width:100%;resize:vertical;font-family:inherit';
-    this._textarea = textarea;
+    this._textarea = document.createElement('textarea');
+    this._textarea.className = 'sf-input';
+    this._textarea.rows = 4;
+    this._textarea.placeholder = 'Write your notes here…';
+    this._textarea.value = this.modelValue || '';
+    this._textarea.style.cssText = 'width:100%;resize:vertical;font-family:inherit';
 
-    const charCount = document.createElement('div');
-    charCount.style.cssText = 'font-size:12px;color:var(--body-quiet-color);text-align:right;margin-top:4px';
-    this._charCount = charCount;
+    this._charCount = document.createElement('div');
+    this._charCount.style.cssText = 'font-size:12px;color:var(--body-quiet-color);text-align:right;margin-top:4px';
     this._updateCharCount();
 
-    textarea.addEventListener('input', () => {
-      this._modelValue = textarea.value;
+    this._textarea.addEventListener('input', () => {
       this._updateCharCount();
-      this.dispatchEvent(new CustomEvent('change', { detail: textarea.value }));
+      this.emitChange(this._textarea.value);
     });
 
-    container.appendChild(label);
-    container.appendChild(textarea);
-    container.appendChild(charCount);
+    container.appendChild(this._label);
+    container.appendChild(this._textarea);
+    container.appendChild(this._charCount);
     this.appendChild(container);
   }
 
-  _updateLabel() {
-    if (this._label) this._label.textContent = this._schema?.title || 'Notes';
-  }
-
-  _updateValue() {
-    if (this._textarea && this._textarea.value !== (this._modelValue || '')) {
-      this._textarea.value = this._modelValue || '';
-      this._updateCharCount();
+  update() {
+    if (this._label) this._label.textContent = this.schema?.title || 'Notes';
+    if (this._textarea && this._textarea.value !== (this.modelValue || '')) {
+      this._textarea.value = this.modelValue || '';
     }
+    this._updateCharCount();
   }
 
   _updateCharCount() {
     if (this._charCount) {
-      const len = (this._modelValue || '').length;
+      const len = (this.modelValue || '').length;
       this._charCount.textContent = `${len} character${len !== 1 ? 's' : ''}`;
     }
   }
