@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/bnznamco/structured-widget-editor/compare/v1.1.0...v1.1.1) (2026-03-21)
+
+
+### Bug Fixes
+
+* prevent moving item down when it's the last in the list ([a74c91b](https://github.com/bnznamco/structured-widget-editor/commit/a74c91b01b5d610ae3ae27ff93f212b99e38cc9e))
+
 # [1.1.0](https://github.com/bnznamco/structured-widget-editor/compare/v1.0.3...v1.1.0) (2026-03-21)
 
 
