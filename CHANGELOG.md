@@ -1,3 +1,14 @@
+# [1.2.0](https://github.com/bnznamco/structured-widget-editor/compare/v1.1.1...v1.2.0) (2026-04-08)
+
+
+### Features
+
+* add conditional fields support ([1639cac](https://github.com/bnznamco/structured-widget-editor/commit/1639cacd49eb5182927136e41163cb27303f49ac))
+* add custom editor in example ([e3f6f0a](https://github.com/bnznamco/structured-widget-editor/commit/e3f6f0ac95a00b48de11e67fc52fb1277a68f187))
+* add support for custom editors ([1f20b0b](https://github.com/bnznamco/structured-widget-editor/commit/1f20b0bea21cfb8f35daf297d224ade5f0c4e0ce))
+* add webcomponent definition for custom editors ([9b473c1](https://github.com/bnznamco/structured-widget-editor/commit/9b473c1b624d1e8bddf5c1af61fd3ba085b78cab))
+* implement BaseEditorElement for custom editors and update example usage ([6726211](https://github.com/bnznamco/structured-widget-editor/commit/67262110bd7e42b5e46ad15ff399e0d7b42c9c3f))
+
 ## [1.1.1](https://github.com/bnznamco/structured-widget-editor/compare/v1.1.0...v1.1.1) (2026-03-21)
 
 
