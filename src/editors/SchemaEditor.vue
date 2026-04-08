@@ -94,7 +94,7 @@ export default {
       if (schema.oneOf && schema.discriminator) return 'UnionEditor';
       if ('const' in schema) return 'HiddenEditor';
       if (schema.enum && schema.enum.length === 1 && schema.type === 'string') return 'HiddenEditor';
-      if (schema._nullable) return 'NullableEditor';
+      if (schema._nullable && (schema.type === 'object' || schema.type === 'array')) return 'NullableEditor';
       if (schema.type === 'object' && schema.properties) return 'ObjectEditor';
       if (schema.type === 'object') return 'JsonEditor';
       if (schema.type === 'array') return 'ArrayEditor';

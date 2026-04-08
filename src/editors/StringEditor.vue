@@ -1,22 +1,28 @@
 <template>
   <div class="sf-field" :class="{ errors: fieldErrors.length }">
-    <span class="sf-label" :class="{ required: isRequired }">{{ title }}</span>
-    <textarea
-      v-if="isLong"
-      class="sf-input sf-textarea"
-      rows="3"
-      :value="modelValue"
-      :placeholder="schema.placeholder || ''"
-      @input="$emit('update:modelValue', $event.target.value)"
-    />
-    <input
-      v-else
-      type="text"
-      class="sf-input"
-      :value="modelValue != null ? String(modelValue) : ''"
-      :placeholder="schema.placeholder || ''"
-      @input="$emit('update:modelValue', $event.target.value)"
-    />
+    <span class="sf-label" :class="{ required: isRequired }">
+      {{ title }}
+      <span v-if="isNullable && isNullValue" class="sf-null-badge">null</span>
+    </span>
+    <div :class="isNullable ? 'sf-input-row' : null">
+      <textarea
+        v-if="isLong"
+        class="sf-input sf-textarea"
+        rows="3"
+        :value="isNullValue ? '' : modelValue"
+        :placeholder="isNullValue ? 'null' : (schema.placeholder || '')"
+        @input="$emit('update:modelValue', $event.target.value)"
+      />
+      <input
+        v-else
+        type="text"
+        class="sf-input"
+        :value="isNullValue ? '' : (modelValue != null ? String(modelValue) : '')"
+        :placeholder="isNullValue ? 'null' : (schema.placeholder || '')"
+        @input="$emit('update:modelValue', $event.target.value)"
+      />
+      <button v-if="isNullable && !isNullValue" type="button" class="sf-null-clear-btn" title="Set to null" @click="$emit('update:modelValue', null)">&#x2715;</button>
+    </div>
     <ul v-if="fieldErrors.length" class="errorlist">
       <li v-for="(err, i) in fieldErrors" :key="i">{{ err }}</li>
     </ul>
@@ -46,6 +52,12 @@ export default {
     },
     isLong() {
       return this.schema.maxLength > 255 || this.schema.format === 'textarea';
+    },
+    isNullable() {
+      return !!this.schema._nullable;
+    },
+    isNullValue() {
+      return this.modelValue === null || this.modelValue === undefined;
     },
     fieldErrors() {
       if (!this.form || !this.form.getErrorsForPath) return [];

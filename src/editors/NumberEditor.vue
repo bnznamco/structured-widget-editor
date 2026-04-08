@@ -1,15 +1,22 @@
 <template>
   <div class="sf-field" :class="{ errors: fieldErrors.length }">
-    <span class="sf-label" :class="{ required: isRequired }">{{ title }}</span>
-    <input
-      type="number"
-      class="sf-input"
-      :step="schema.type === 'integer' ? '1' : 'any'"
-      :min="schema.minimum != null ? String(schema.minimum) : undefined"
-      :max="schema.maximum != null ? String(schema.maximum) : undefined"
-      :value="modelValue != null ? modelValue : ''"
-      @input="onInput"
-    />
+    <span class="sf-label" :class="{ required: isRequired }">
+      {{ title }}
+      <span v-if="isNullable && isNullValue" class="sf-null-badge">null</span>
+    </span>
+    <div :class="isNullable ? 'sf-input-row' : null">
+      <input
+        type="number"
+        class="sf-input"
+        :step="schema.type === 'integer' ? '1' : 'any'"
+        :min="schema.minimum != null ? String(schema.minimum) : undefined"
+        :max="schema.maximum != null ? String(schema.maximum) : undefined"
+        :value="isNullValue ? '' : modelValue"
+        :placeholder="isNullValue ? 'null' : undefined"
+        @input="onInput"
+      />
+      <button v-if="isNullable && !isNullValue" type="button" class="sf-null-clear-btn" title="Set to null" @click="$emit('update:modelValue', null)">&#x2715;</button>
+    </div>
     <ul v-if="fieldErrors.length" class="errorlist">
       <li v-for="(err, i) in fieldErrors" :key="i">{{ err }}</li>
     </ul>
@@ -36,6 +43,12 @@ export default {
       const fieldName = this.path[this.path.length - 1];
       const parentSchema = this.form.getSchemaAtPath(parentPath);
       return parentSchema && Array.isArray(parentSchema.required) && parentSchema.required.includes(fieldName);
+    },
+    isNullable() {
+      return !!this.schema._nullable;
+    },
+    isNullValue() {
+      return this.modelValue === null || this.modelValue === undefined;
     },
     fieldErrors() {
       if (!this.form || !this.form.getErrorsForPath) return [];

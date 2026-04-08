@@ -126,6 +126,11 @@ const sampleData = {
     { id: 8, name: 'Literary Fiction', model: 'library.Category' },
   ],
   notes: 'Winner of the Nobel Prize in Literature (1982).',
+  subtitle: null,
+  rating: 9.8,
+  edition_number: null,
+  out_of_print: false,
+  age_rating: null,
   chapters: [
     { title: 'Chapter I', pages: 24 },
     { title: 'Chapter II', pages: 31 },

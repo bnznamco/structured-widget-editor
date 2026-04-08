@@ -125,6 +125,46 @@
       ],
       "default": null
     },
+    "subtitle": {
+      "title": "Subtitle",
+      "anyOf": [
+        { "type": "null" },
+        { "type": "string" }
+      ],
+      "default": null
+    },
+    "rating": {
+      "title": "Rating",
+      "anyOf": [
+        { "type": "null" },
+        { "type": "number", "minimum": 0, "maximum": 10 }
+      ],
+      "default": null
+    },
+    "edition_number": {
+      "title": "Edition Number",
+      "anyOf": [
+        { "type": "null" },
+        { "type": "integer", "minimum": 1 }
+      ],
+      "default": null
+    },
+    "out_of_print": {
+      "title": "Out of Print",
+      "anyOf": [
+        { "type": "null" },
+        { "type": "boolean" }
+      ],
+      "default": null
+    },
+    "age_rating": {
+      "title": "Age Rating",
+      "anyOf": [
+        { "type": "null" },
+        { "type": "string", "enum": ["all_ages", "teen", "mature"] }
+      ],
+      "default": null
+    },
     "chapters": {
       "type": "array",
       "title": "Chapters",
