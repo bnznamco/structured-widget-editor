@@ -131,7 +131,8 @@
     border: 1px solid var(--border-color, #ccc);
     border-radius: 4px;
     background: var(--darkened-bg, #f8f8f8);
-    overflow: hidden;
+    overflow: visible;
+    position: relative;
   }
 
   .sf-array-item {
@@ -156,6 +157,7 @@
     padding: 4px 8px;
     background: var(--darkened-bg, #f0f0f0);
     border-bottom: 1px solid var(--border-color, #ccc);
+    border-radius: 4px 4px 0 0;
   }
 
   .sf-array-item-left {
