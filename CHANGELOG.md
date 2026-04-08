@@ -1,3 +1,11 @@
+## [1.2.1](https://github.com/bnznamco/structured-widget-editor/compare/v1.2.0...v1.2.1) (2026-04-08)
+
+
+### Bug Fixes
+
+* fetchResults in relationEditor now fetches content in correct language (if provided) ([774093e](https://github.com/bnznamco/structured-widget-editor/commit/774093e94870c05f57f09c609a1b5d2b49636f61))
+* update overflow and position styles for array items in editors ([961199b](https://github.com/bnznamco/structured-widget-editor/commit/961199b47340c79177ff0c69fedd3ec90689e80c))
+
 # [1.2.0](https://github.com/bnznamco/structured-widget-editor/compare/v1.1.1...v1.2.0) (2026-04-08)
 
 
