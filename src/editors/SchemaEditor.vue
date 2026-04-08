@@ -32,6 +32,7 @@ import ArrayEditor from './ArrayEditor.vue';
 import NullableEditor from './NullableEditor.vue';
 import UnionEditor from './UnionEditor.vue';
 import RelationEditor from './RelationEditor.vue';
+import JsonEditor from './JsonEditor.vue';
 import WebComponentWrapper from './WebComponentWrapper.vue';
 
 const MAX_DEPTH = 12;
@@ -49,6 +50,7 @@ export default {
     NullableEditor,
     UnionEditor,
     RelationEditor,
+    JsonEditor,
     WebComponentWrapper,
   },
   inject: {
@@ -94,6 +96,7 @@ export default {
       if (schema.enum && schema.enum.length === 1 && schema.type === 'string') return 'HiddenEditor';
       if (schema._nullable) return 'NullableEditor';
       if (schema.type === 'object' && schema.properties) return 'ObjectEditor';
+      if (schema.type === 'object') return 'JsonEditor';
       if (schema.type === 'array') return 'ArrayEditor';
       if (schema.enum) return 'SelectEditor';
       if (schema.type === 'boolean') return 'BooleanEditor';

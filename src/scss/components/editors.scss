@@ -234,6 +234,64 @@
     }
   }
 
+  // --- JSON editor ---
+  .sf-field-json {
+    .sf-json-editor {
+      position: relative;
+      border: 1px solid var(--border-color, #ccc);
+      border-radius: 4px;
+      overflow: hidden;
+
+      &.sf-json-error {
+        border-color: var(--error-fg, #ba2121);
+      }
+    }
+
+    .sf-json-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 4px 6px;
+      background: var(--darkened-bg, #f8f8f8);
+      border-bottom: 1px solid var(--border-color, #ccc);
+    }
+
+    .sf-json-error-msg {
+      font-size: 0.72rem;
+      color: var(--error-fg, #ba2121);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sf-json-format-btn {
+      flex-shrink: 0;
+    }
+
+    .sf-json-ace-container {
+      width: 100%;
+      min-height: 120px;
+      font-size: 0.8rem;
+      // Ace sets its own height via maxLines/minLines
+      .ace_editor {
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important;
+        font-size: 0.8rem !important;
+      }
+    }
+
+    .sf-json-textarea-fallback {
+      width: 100%;
+      min-height: 120px;
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      font-size: 0.8rem;
+      border: none;
+      border-radius: 0;
+      resize: vertical;
+    }
+  }
+
   // --- Union editor ---
   .sf-union {
     margin-bottom: 12px;
