@@ -14,6 +14,7 @@
 <script>
 import SchemaEditor from './editors/SchemaEditor.vue';
 import { deepClone } from './utils';
+import { applyConditionals, hasConditionals } from './conditionals';
 
 export default {
   name: 'SchemaForm',
@@ -48,6 +49,7 @@ export default {
       return {
         resolveSchema: (s) => this.resolveSchema(s),
         getSchemaAtPath: (p) => this.getSchemaAtPath(p),
+        getEffectiveSchemaAtPath: (p) => this.getEffectiveSchemaAtPath(p),
         getErrorsForPath: (p) => this.getErrorsForPath(p),
       };
     },
@@ -127,6 +129,28 @@ export default {
           return null;
         }
       }
+      return schema;
+    },
+
+    getEffectiveSchemaAtPath(path) {
+      let schema = this.resolveSchema(this.rootSchema);
+      let value = this.currentValue;
+      for (const segment of path) {
+        if (!schema) return null;
+        if (schema.properties || schema.if || schema.allOf || schema.dependentSchemas) {
+          if (hasConditionals(schema)) schema = applyConditionals(schema, value || {}, (s) => this.resolveSchema(s));
+        }
+        if (schema.properties && schema.properties[segment] !== undefined) {
+          schema = this.resolveSchema(schema.properties[segment]);
+          value = value != null ? value[segment] : undefined;
+        } else if (schema.items) {
+          schema = this.resolveSchema(schema.items);
+          value = Array.isArray(value) ? value[segment] : undefined;
+        } else {
+          return null;
+        }
+      }
+      if (schema && hasConditionals(schema)) schema = applyConditionals(schema, value || {});
       return schema;
     },
 

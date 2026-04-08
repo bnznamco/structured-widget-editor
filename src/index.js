@@ -14,6 +14,7 @@ export { default as UnionEditor } from './editors/UnionEditor.vue';
 export { default as RelationEditor } from './editors/RelationEditor.vue';
 export { default as WebComponentWrapper } from './editors/WebComponentWrapper.vue';
 export { BaseEditorElement } from './BaseEditorElement.js';
+export { applyConditionals, matchesSchema, hasConditionals } from './conditionals.js';
 
 import { defineCustomElement } from 'vue';
 import SchemaFormComponent from './SchemaForm.vue';

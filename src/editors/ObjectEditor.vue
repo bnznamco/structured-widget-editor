@@ -2,7 +2,7 @@
   <div v-if="isRoot" class="sf-object sf-object-root">
     <div class="sf-object-fields">
       <SchemaEditor
-        v-for="(propSchema, key) in (schema.properties || {})"
+        v-for="(propSchema, key) in (effectiveSchema.properties || {})"
         :key="key"
         :schema="form.resolveSchema(propSchema)"
         :model-value="(modelValue || {})[key]"
@@ -22,7 +22,7 @@
     </legend>
     <div v-show="!collapsed" class="sf-object-fields">
       <SchemaEditor
-        v-for="(propSchema, key) in (schema.properties || {})"
+        v-for="(propSchema, key) in (effectiveSchema.properties || {})"
         :key="key"
         :schema="form.resolveSchema(propSchema)"
         :model-value="(modelValue || {})[key]"
@@ -37,6 +37,7 @@
 <script>
 import SchemaEditor from './SchemaEditor.vue';
 import SfIcon from './SfIcon.vue';
+import { applyConditionals, hasConditionals } from '../conditionals';
 
 export default {
   name: 'ObjectEditor',
@@ -64,10 +65,14 @@ export default {
     title() {
       return this.schema.title || this.humanize(this.path[this.path.length - 1]) || '';
     },
+    effectiveSchema() {
+      if (!hasConditionals(this.schema)) return this.schema;
+      return applyConditionals(this.schema, this.modelValue || {}, this.form?.resolveSchema);
+    },
     summary() {
       const val = this.modelValue || {};
       const parts = [];
-      for (const key of Object.keys(this.schema.properties || {})) {
+      for (const key of Object.keys(this.effectiveSchema.properties || {})) {
         if (parts.length >= 3) break;
         const v = val[key];
         if (v !== null && v !== undefined && v !== '' && typeof v !== 'object') {
@@ -90,7 +95,22 @@ export default {
     },
     onChildChange(key, value) {
       const newVal = { ...(this.modelValue || {}), [key]: value };
-      this.$emit('update:modelValue', newVal);
+      this.$emit('update:modelValue', this.pruneInactive(newVal));
+    },
+    pruneInactive(value) {
+      if (!hasConditionals(this.schema)) return value;
+      const effective = applyConditionals(this.schema, value, this.form?.resolveSchema);
+      const allowed = new Set(Object.keys(effective.properties || {}));
+      let changed = false;
+      const out = {};
+      for (const k of Object.keys(value)) {
+        if (allowed.has(k)) {
+          out[k] = value[k];
+        } else {
+          changed = true;
+        }
+      }
+      return changed ? out : value;
     },
   },
 };

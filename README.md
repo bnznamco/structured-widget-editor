@@ -411,6 +411,76 @@ customElements.define('my-color-picker', MyColorPicker);
 | `render()` | **Override.** Called once when connected — build the DOM here |
 | `update()` | **Override.** Called on every property change after `render()` |
 
+## Conditional fields
+
+The form renderer evaluates standard JSON Schema conditional keywords on every change and updates the visible/required fields accordingly. No custom keywords — anything you put in the schema is also enforced server-side by Pydantic v2.
+
+Supported keywords on object schemas:
+
+| Keyword | Use case |
+|---|---|
+| `if` / `then` / `else` | "If `status == 'archived'`, require `archive_reason`" |
+| `allOf: [{ if, then }, ...]` | Multiple independent rules on the same object |
+| `dependentSchemas` | "If field `publisher` is present, also show `edition`" |
+| `dependentRequired` | Lighter version: only toggles `required` |
+
+Example schema fragment:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "status": { "enum": ["draft", "archived"] }
+  },
+  "allOf": [
+    {
+      "if":   { "properties": { "status": { "const": "archived" } }, "required": ["status"] },
+      "then": {
+        "properties": { "archive_reason": { "type": "string" } },
+        "required": ["archive_reason"]
+      }
+    }
+  ],
+  "dependentSchemas": {
+    "publisher": { "properties": { "edition": { "type": "string" } } }
+  }
+}
+```
+
+Fields that disappear when a rule stops matching are pruned from the form value, so the emitted JSON stays clean.
+
+### Declaring conditionals on a Pydantic model
+
+`django-structured-field` ships matching helpers in `structured.pydantic.conditionals` that compile down to the same standard keywords:
+
+```python
+from typing import Literal, Optional
+from pydantic import ConfigDict
+from structured.pydantic.models import BaseModel
+from structured.pydantic.conditionals import (
+    When, conditional_schema, dependent_schemas,
+)
+
+class Book(BaseModel):
+    status: Literal["draft", "review", "published", "archived"] = "draft"
+    archive_reason: Optional[str] = None
+    published_at: Optional[str] = None
+    publisher: Optional[str] = None
+    edition: Optional[str] = None
+
+    model_config = ConfigDict(json_schema_extra=conditional_schema(
+        When("status", equals="archived",
+             then={"required": ["archive_reason"]}),
+        When("status", equals="published",
+             then={"required": ["published_at"]}),
+        dependent_schemas(publisher={
+            "properties": {"edition": {"type": "string"}}
+        }),
+    ))
+```
+
+`When(field, equals=..., in_=..., not_equals=..., then=..., else_=...)` builds a single `if/then/else` clause; `conditional_schema(...)` groups them into `allOf` and merges any `dependent_schemas` / `dependent_required` fragments.
+
 ## Theming
 
 All styles use CSS custom properties with sensible defaults. Override them to match your design system:

@@ -146,5 +146,32 @@
       }
     }
   },
-  "required": ["title", "isbn", "main_author"]
+  "required": ["title", "isbn", "main_author"],
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "archived" } }, "required": ["status"] },
+      "then": {
+        "properties": {
+          "archive_reason": { "type": "string", "title": "Archive Reason", "format": "textarea" }
+        },
+        "required": ["archive_reason"]
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "published" } }, "required": ["status"] },
+      "then": {
+        "properties": {
+          "published_at": { "type": "string", "title": "Published At", "format": "date" }
+        },
+        "required": ["published_at"]
+      }
+    }
+  ],
+  "dependentSchemas": {
+    "publisher": {
+      "properties": {
+        "edition": { "type": "string", "title": "Edition" }
+      }
+    }
+  }
 }
