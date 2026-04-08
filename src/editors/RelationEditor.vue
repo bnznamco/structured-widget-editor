@@ -46,6 +46,9 @@ import SfIcon from './SfIcon.vue';
 export default {
   name: 'RelationEditor',
   components: { SfIcon },
+  inject: {
+    language: { from: 'language', default: () => () => '' },
+  },
   props: {
     schema: { type: Object, required: true },
     modelValue: { default: null },
@@ -151,6 +154,8 @@ export default {
         const url = new URL(this.searchUrl, window.location.origin);
         url.searchParams.set('_q', query || '');
         url.searchParams.set('page', String(page));
+        const lang = typeof this.language === 'function' ? this.language() : this.language;
+        if (lang) url.searchParams.set('_lang', lang);
 
         const response = await fetch(url, { credentials: 'same-origin' });
         if (!response.ok) return;

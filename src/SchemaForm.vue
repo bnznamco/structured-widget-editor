@@ -24,12 +24,14 @@ export default {
     initialData: { default: undefined },
     errors: { type: Object, default: () => ({}) },
     customEditors: { type: Array, default: () => [] },
+    language: { type: String, default: '' },
   },
   emits: ['change'],
   expose: ['getValue'],
   provide() {
     return {
       customEditors: () => this.customEditors,
+      language: () => this.language,
     };
   },
   data() {
