@@ -1,7 +1,7 @@
 <template>
   <div class="sf-nullable" :class="{ errors: fieldErrors.length }">
     <div class="sf-nullable-header">
-      <label class="sf-label" :class="{ required: isRequired }">{{ title }}</label>
+      <span class="sf-label" :class="{ required: isRequired }">{{ title }}</span>
       <button type="button" :class="toggleClass" @click="toggle">
         <template v-if="isNull">
           <SfIcon name="plus" /> Add

@@ -1,6 +1,6 @@
 <template>
   <div class="sf-field sf-relation" :class="{ errors: fieldErrors.length }" ref="root">
-    <label class="sf-label" :class="{ required: isRequired }">{{ title }}</label>
+    <span class="sf-label" :class="{ required: isRequired }">{{ title }}</span>
     <div class="sf-relation-wrapper">
       <!-- Selected items -->
       <div v-if="selected.length" class="sf-relation-selected">

@@ -1,6 +1,6 @@
 <template>
   <div class="sf-field" :class="{ errors: fieldErrors.length }">
-    <label class="sf-label" :class="{ required: isRequired }">{{ title }}</label>
+    <span class="sf-label" :class="{ required: isRequired }">{{ title }}</span>
     <input
       type="number"
       class="sf-input"

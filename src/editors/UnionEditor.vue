@@ -1,7 +1,7 @@
 <template>
   <div class="sf-union">
     <div class="sf-field">
-      <label class="sf-label">{{ title }}</label>
+      <span class="sf-label">{{ title }}</span>
       <select class="sf-input sf-select" :value="currentType" @change="onTypeChange">
         <option v-for="key in typeKeys" :key="key" :value="key">{{ humanize(key) }}</option>
       </select>
