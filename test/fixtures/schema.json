@@ -39,6 +39,15 @@
     "pages": { "type": "integer", "title": "Pages", "default": 0, "minimum": 1, "maximum": 10000 },
     "price": { "type": "number", "title": "Price", "default": 0, "minimum": 0 },
     "published": { "type": "boolean", "title": "Published", "default": false },
+    "release_date": { "type": "string", "title": "Release Date", "format": "date" },
+    "last_reviewed_at": {
+      "title": "Last Reviewed At",
+      "anyOf": [
+        { "type": "null" },
+        { "type": "string", "format": "date-time" }
+      ],
+      "default": null
+    },
     "status": {
       "type": "string",
       "title": "Status",

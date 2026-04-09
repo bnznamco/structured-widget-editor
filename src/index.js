@@ -5,6 +5,7 @@ export { default as SchemaEditor } from './editors/SchemaEditor.vue';
 export { default as StringEditor } from './editors/StringEditor.vue';
 export { default as NumberEditor } from './editors/NumberEditor.vue';
 export { default as BooleanEditor } from './editors/BooleanEditor.vue';
+export { default as DateEditor } from './editors/DateEditor.vue';
 export { default as SelectEditor } from './editors/SelectEditor.vue';
 export { default as HiddenEditor } from './editors/HiddenEditor.vue';
 export { default as ObjectEditor } from './editors/ObjectEditor.vue';

@@ -25,6 +25,7 @@
 import StringEditor from './StringEditor.vue';
 import NumberEditor from './NumberEditor.vue';
 import BooleanEditor from './BooleanEditor.vue';
+import DateEditor from './DateEditor.vue';
 import SelectEditor from './SelectEditor.vue';
 import HiddenEditor from './HiddenEditor.vue';
 import ObjectEditor from './ObjectEditor.vue';
@@ -43,6 +44,7 @@ export default {
     StringEditor,
     NumberEditor,
     BooleanEditor,
+    DateEditor,
     SelectEditor,
     HiddenEditor,
     ObjectEditor,
@@ -101,6 +103,7 @@ export default {
       if (schema.enum) return 'SelectEditor';
       if (schema.type === 'boolean') return 'BooleanEditor';
       if (schema.type === 'number' || schema.type === 'integer') return 'NumberEditor';
+      if (schema.type === 'string' && (schema.format === 'date' || schema.format === 'date-time')) return 'DateEditor';
 
       return 'StringEditor';
     },
