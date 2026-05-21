@@ -1,3 +1,12 @@
+## [1.2.2](https://github.com/bnznamco/structured-widget-editor/compare/v1.2.1...v1.2.2) (2026-04-08)
+
+
+### Bug Fixes
+
+* correctly render JSON editor for generic objects ([7c79abb](https://github.com/bnznamco/structured-widget-editor/commit/7c79abb6b2c8c0fbcacb9ae968f5cbb91a2874d1))
+* remove redondant UI for nullable fields ([5861621](https://github.com/bnznamco/structured-widget-editor/commit/5861621f160d3fb41b9aad2ec0bc589a07fc610b))
+* replace label elements with span for consistency in editor components ([38a52cd](https://github.com/bnznamco/structured-widget-editor/commit/38a52cd7779e01deae6f7dcd0716b105e30a6e4c))
+
 ## [1.2.1](https://github.com/bnznamco/structured-widget-editor/compare/v1.2.0...v1.2.1) (2026-04-08)
 
 
