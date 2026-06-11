@@ -56,6 +56,9 @@ export default {
   data() {
     return {
       collapsed: false,
+      // Values pruned when a conditional rule deactivated their field,
+      // kept so toggling the controller back restores what the user typed.
+      prunedStash: {},
     };
   },
   computed: {
@@ -103,10 +106,21 @@ export default {
       const allowed = new Set(Object.keys(effective.properties || {}));
       let changed = false;
       const out = {};
+      // restore stashed values for fields a rule just re-activated
+      for (const k of allowed) {
+        if (!(k in value) && k in this.prunedStash) {
+          out[k] = this.prunedStash[k];
+          delete this.prunedStash[k];
+          changed = true;
+        }
+      }
       for (const k of Object.keys(value)) {
         if (allowed.has(k)) {
           out[k] = value[k];
         } else {
+          // pruned from the emitted value (documented behavior), but kept
+          // locally so a controller toggle round-trip is not destructive
+          this.prunedStash[k] = value[k];
           changed = true;
         }
       }
