@@ -17,6 +17,10 @@ permissions:
 
 jobs:
   release:
+    # Releasing publishes npm `latest` AND overwrites the cdn/latest channel
+    # that every deployed django-structured-field admin loads — never allow
+    # it from a non-master ref (including force_publish recovery runs).
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     outputs:
       new_release_version: ${{ steps.semantic.outputs.new_release_version }}
@@ -47,9 +51,9 @@ jobs:
 
       - name: Semantic Release
         id: semantic
+        # No `branches` override: the release branch configuration lives in
+        # package.json ("release".branches = ["master"]).
         uses: cycjimmy/semantic-release-action@v4
-        with:
-          branches: ${{ github.ref_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
