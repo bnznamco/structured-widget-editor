@@ -89,16 +89,14 @@ export default {
         const hasNull = schema.anyOf.some(s => s.type === 'null');
         if (hasNull && nonNull.length === 1) {
           const resolved = this.resolveSchema(nonNull[0]);
-          const out = {
-            ...resolved,
-            _nullable: true,
-            title: schema.title || resolved.title,
-            default: 'default' in schema ? schema.default : null,
-          };
-          // Optional choice fields: pydantic emits the choice oneOf as a
-          // SIBLING of anyOf — carry it through the nullable collapse so
-          // the select options survive.
-          if (isChoiceOneOf(schema.oneOf)) out.oneOf = schema.oneOf;
+          // Carry ALL sibling keys through the nullable collapse: pydantic
+          // emits json_schema_extra (placeholder, minLength/maxLength,
+          // minimum/maximum, format, choice oneOf, ...) as SIBLINGS of
+          // anyOf on Optional fields. Outer keys override the inner branch.
+          const { anyOf, oneOf, ...rest } = schema;
+          const out = { ...resolved, ...rest, _nullable: true };
+          if (!('default' in schema)) out.default = null;
+          if (isChoiceOneOf(oneOf)) out.oneOf = oneOf;
           return out;
         }
         if (nonNull.length >= 1) return this.resolveSchema(nonNull[0]);
@@ -117,12 +115,10 @@ export default {
         const hasNull = schema.oneOf.some(s => s.type === 'null');
         if (hasNull && nonNull.length === 1) {
           const resolved = this.resolveSchema(nonNull[0]);
-          return {
-            ...resolved,
-            _nullable: true,
-            title: schema.title || resolved.title,
-            default: 'default' in schema ? schema.default : null,
-          };
+          const { anyOf, oneOf, ...rest } = schema;
+          const out = { ...resolved, ...rest, _nullable: true };
+          if (!('default' in schema)) out.default = null;
+          return out;
         }
         if (nonNull.length >= 1) return this.resolveSchema(nonNull[0]);
       }
