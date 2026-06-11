@@ -27,6 +27,8 @@
   "scripts": {
     "build": "rollup -c && node scripts/bundle-iife.mjs",
     "dev": "rollup -c -w",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "test:serve": "vite --open"
   },
   "keywords": [
