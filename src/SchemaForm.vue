@@ -13,7 +13,7 @@
 
 <script>
 import SchemaEditor from './editors/SchemaEditor.vue';
-import { deepClone } from './utils';
+import { deepClone, isChoiceOneOf } from './utils';
 import { applyConditionals, hasConditionals } from './conditionals';
 
 export default {
@@ -89,17 +89,28 @@ export default {
         const hasNull = schema.anyOf.some(s => s.type === 'null');
         if (hasNull && nonNull.length === 1) {
           const resolved = this.resolveSchema(nonNull[0]);
-          return {
+          const out = {
             ...resolved,
             _nullable: true,
             title: schema.title || resolved.title,
             default: 'default' in schema ? schema.default : null,
           };
+          // Optional choice fields: pydantic emits the choice oneOf as a
+          // SIBLING of anyOf — carry it through the nullable collapse so
+          // the select options survive.
+          if (isChoiceOneOf(schema.oneOf)) out.oneOf = schema.oneOf;
+          return out;
         }
         if (nonNull.length >= 1) return this.resolveSchema(nonNull[0]);
       }
 
       if (schema.oneOf && schema.discriminator) return schema;
+
+      // A oneOf of {const, title} value options is a choice list (select),
+      // not alternative sub-schemas: keep it intact for SelectEditor instead
+      // of collapsing to the first member (which routed to HiddenEditor and
+      // overwrote stored values on mount).
+      if (isChoiceOneOf(schema.oneOf)) return schema;
 
       if (schema.oneOf) {
         const nonNull = schema.oneOf.filter(s => s.type !== 'null');

@@ -16,6 +16,24 @@ export function deepClone(obj) {
   return clone;
 }
 
+export function isChoiceOneOf(list) {
+  // A "choice list" oneOf: every member is a {const, title?} value option
+  // (the shape emitted for enumerated choices, e.g. metaobjects' select
+  // kind), as opposed to a oneOf of alternative sub-schemas.
+  return (
+    Array.isArray(list) &&
+    list.length > 0 &&
+    list.every(
+      (m) =>
+        m &&
+        typeof m === 'object' &&
+        'const' in m &&
+        !('properties' in m) &&
+        m.type !== 'null'
+    )
+  );
+}
+
 export function getDefaultForSchema(schema) {
   if ('default' in schema) return deepClone(schema.default);
   if (schema.type === 'object') {

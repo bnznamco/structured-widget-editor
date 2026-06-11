@@ -35,6 +35,7 @@ import UnionEditor from './UnionEditor.vue';
 import RelationEditor from './RelationEditor.vue';
 import JsonEditor from './JsonEditor.vue';
 import WebComponentWrapper from './WebComponentWrapper.vue';
+import { isChoiceOneOf } from '../utils';
 
 const MAX_DEPTH = 12;
 
@@ -94,6 +95,9 @@ export default {
 
       if (schema.type === 'relation') return 'RelationEditor';
       if (schema.oneOf && schema.discriminator) return 'UnionEditor';
+      // Choice-list oneOf ({const, title} options) renders as a select —
+      // must be checked before the 'const' HiddenEditor routing.
+      if (isChoiceOneOf(schema.oneOf)) return 'SelectEditor';
       if ('const' in schema) return 'HiddenEditor';
       if (schema.enum && schema.enum.length === 1 && schema.type === 'string') return 'HiddenEditor';
       if (schema._nullable && (schema.type === 'object' || schema.type === 'array')) return 'NullableEditor';

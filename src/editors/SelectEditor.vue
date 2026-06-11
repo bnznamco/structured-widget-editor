@@ -7,12 +7,12 @@
     <div :class="isNullable ? 'sf-input-row' : null">
       <select
         class="sf-input sf-select"
-        :value="isNullValue ? '' : (modelValue != null ? String(modelValue) : '')"
-        @change="$emit('update:modelValue', $event.target.value)"
+        :value="selectedIndex === -1 ? '' : String(selectedIndex)"
+        @change="onChange($event.target.value)"
       >
-        <option v-if="isNullable && isNullValue" value="" disabled selected>null</option>
-        <option v-for="opt in (schema.enum || [])" :key="opt" :value="String(opt)">
-          {{ opt }}
+        <option v-if="selectedIndex === -1" value="" disabled selected>{{ isNullValue ? 'null' : '' }}</option>
+        <option v-for="(opt, i) in options" :key="i" :value="String(i)">
+          {{ opt.label }}
         </option>
       </select>
       <button v-if="isNullable && !isNullValue" type="button" class="sf-null-clear-btn" title="Set to null" @click="$emit('update:modelValue', null)">&#x2715;</button>
@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import { isChoiceOneOf } from '../utils';
+
 export default {
   name: 'SelectEditor',
   props: {
@@ -34,6 +36,20 @@ export default {
   },
   emits: ['update:modelValue'],
   computed: {
+    options() {
+      // Two source shapes: a choice-list oneOf ({const, title} pairs, e.g.
+      // metaobjects' select kind — labels preserved) or a plain enum.
+      if (isChoiceOneOf(this.schema.oneOf)) {
+        return this.schema.oneOf.map((o) => ({
+          value: o.const,
+          label: o.title != null ? o.title : String(o.const),
+        }));
+      }
+      return (this.schema.enum || []).map((v) => ({ value: v, label: String(v) }));
+    },
+    selectedIndex() {
+      return this.options.findIndex((o) => o.value === this.modelValue);
+    },
     title() {
       return this.schema.title || this.humanize(this.path[this.path.length - 1]) || '';
     },
@@ -56,6 +72,13 @@ export default {
     },
   },
   methods: {
+    onChange(indexStr) {
+      const opt = this.options[Number(indexStr)];
+      // Emit the ORIGINAL option value (options are addressed by index in
+      // the DOM), so integer/boolean enums keep their native type instead
+      // of being stringified by the <select> element.
+      if (opt !== undefined) this.$emit('update:modelValue', opt.value);
+    },
     humanize(str) {
       if (!str) return '';
       return str.replace(/_/g, ' ').replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, s => s.toUpperCase());

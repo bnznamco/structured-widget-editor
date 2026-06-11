@@ -4,60 +4,145 @@
       "type": "object",
       "title": "Physical Format",
       "properties": {
-        "format_type": { "const": "physical", "default": "physical" },
-        "weight_grams": { "type": "integer", "title": "Weight (g)", "default": 0, "minimum": 0 },
-        "dimensions": { "type": "string", "title": "Dimensions", "default": "" }
+        "format_type": {
+          "const": "physical",
+          "default": "physical"
+        },
+        "weight_grams": {
+          "type": "integer",
+          "title": "Weight (g)",
+          "default": 0,
+          "minimum": 0
+        },
+        "dimensions": {
+          "type": "string",
+          "title": "Dimensions",
+          "default": ""
+        }
       },
-      "required": ["format_type"]
+      "required": [
+        "format_type"
+      ]
     },
     "DigitalFormat": {
       "type": "object",
       "title": "Digital Format",
       "properties": {
-        "format_type": { "const": "digital", "default": "digital" },
-        "file_size_mb": { "type": "number", "title": "File Size (MB)", "default": 0, "minimum": 0 },
-        "drm_protected": { "type": "boolean", "title": "DRM Protected", "default": false }
+        "format_type": {
+          "const": "digital",
+          "default": "digital"
+        },
+        "file_size_mb": {
+          "type": "number",
+          "title": "File Size (MB)",
+          "default": 0,
+          "minimum": 0
+        },
+        "drm_protected": {
+          "type": "boolean",
+          "title": "DRM Protected",
+          "default": false
+        }
       },
-      "required": ["format_type"]
+      "required": [
+        "format_type"
+      ]
     },
     "Chapter": {
       "type": "object",
       "title": "Chapter",
       "properties": {
-        "title": { "type": "string", "title": "Chapter Title" },
-        "pages": { "type": "integer", "title": "Pages", "default": 0, "minimum": 1 }
+        "title": {
+          "type": "string",
+          "title": "Chapter Title"
+        },
+        "pages": {
+          "type": "integer",
+          "title": "Pages",
+          "default": 0,
+          "minimum": 1
+        }
       },
-      "required": ["title"]
+      "required": [
+        "title"
+      ]
     }
   },
   "type": "object",
   "title": "Book",
   "properties": {
-    "title": { "type": "string", "title": "Title" },
-    "isbn": { "type": "string", "title": "ISBN" },
-    "description": { "type": "string", "title": "Description", "format": "textarea", "maxLength": 2000 },
-    "pages": { "type": "integer", "title": "Pages", "default": 0, "minimum": 1, "maximum": 10000 },
-    "price": { "type": "number", "title": "Price", "default": 0, "minimum": 0 },
-    "published": { "type": "boolean", "title": "Published", "default": false },
-    "release_date": { "type": "string", "title": "Release Date", "format": "date" },
+    "title": {
+      "type": "string",
+      "title": "Title"
+    },
+    "isbn": {
+      "type": "string",
+      "title": "ISBN"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description",
+      "format": "textarea",
+      "maxLength": 2000
+    },
+    "pages": {
+      "type": "integer",
+      "title": "Pages",
+      "default": 0,
+      "minimum": 1,
+      "maximum": 10000
+    },
+    "price": {
+      "type": "number",
+      "title": "Price",
+      "default": 0,
+      "minimum": 0
+    },
+    "published": {
+      "type": "boolean",
+      "title": "Published",
+      "default": false
+    },
+    "release_date": {
+      "type": "string",
+      "title": "Release Date",
+      "format": "date"
+    },
     "last_reviewed_at": {
       "title": "Last Reviewed At",
       "anyOf": [
-        { "type": "null" },
-        { "type": "string", "format": "date-time" }
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "format": "date-time"
+        }
       ],
       "default": null
     },
     "status": {
       "type": "string",
       "title": "Status",
-      "enum": ["draft", "review", "published", "archived"],
+      "enum": [
+        "draft",
+        "review",
+        "published",
+        "archived"
+      ],
       "default": "draft"
     },
     "language": {
       "type": "string",
       "title": "Language",
-      "enum": ["en", "es", "fr", "de", "it", "pt"],
+      "enum": [
+        "en",
+        "es",
+        "fr",
+        "de",
+        "it",
+        "pt"
+      ],
       "default": "en"
     },
     "main_author": {
@@ -129,62 +214,102 @@
     "notes": {
       "title": "Notes",
       "anyOf": [
-        { "type": "null" },
-        { "type": "string", "format": "textarea", "maxLength": 1000 }
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "format": "textarea",
+          "maxLength": 1000
+        }
       ],
       "default": null
     },
     "subtitle": {
       "title": "Subtitle",
       "anyOf": [
-        { "type": "null" },
-        { "type": "string" }
+        {
+          "type": "null"
+        },
+        {
+          "type": "string"
+        }
       ],
       "default": null
     },
     "rating": {
       "title": "Rating",
       "anyOf": [
-        { "type": "null" },
-        { "type": "number", "minimum": 0, "maximum": 10 }
+        {
+          "type": "null"
+        },
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        }
       ],
       "default": null
     },
     "edition_number": {
       "title": "Edition Number",
       "anyOf": [
-        { "type": "null" },
-        { "type": "integer", "minimum": 1 }
+        {
+          "type": "null"
+        },
+        {
+          "type": "integer",
+          "minimum": 1
+        }
       ],
       "default": null
     },
     "out_of_print": {
       "title": "Out of Print",
       "anyOf": [
-        { "type": "null" },
-        { "type": "boolean" }
+        {
+          "type": "null"
+        },
+        {
+          "type": "boolean"
+        }
       ],
       "default": null
     },
     "age_rating": {
       "title": "Age Rating",
       "anyOf": [
-        { "type": "null" },
-        { "type": "string", "enum": ["all_ages", "teen", "mature"] }
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "all_ages",
+            "teen",
+            "mature"
+          ]
+        }
       ],
       "default": null
     },
     "chapters": {
       "type": "array",
       "title": "Chapters",
-      "items": { "$ref": "#/$defs/Chapter" },
+      "items": {
+        "$ref": "#/$defs/Chapter"
+      },
       "default": []
     },
     "format": {
       "title": "Format",
       "oneOf": [
-        { "$ref": "#/$defs/PhysicalFormat" },
-        { "$ref": "#/$defs/DigitalFormat" }
+        {
+          "$ref": "#/$defs/PhysicalFormat"
+        },
+        {
+          "$ref": "#/$defs/DigitalFormat"
+        }
       ],
       "discriminator": {
         "propertyName": "format_type",
@@ -193,33 +318,110 @@
           "digital": "#/$defs/DigitalFormat"
         }
       }
+    },
+    "cover_type": {
+      "type": "string",
+      "title": "Cover type",
+      "oneOf": [
+        {
+          "const": "soft",
+          "title": "Softcover"
+        },
+        {
+          "const": "hard",
+          "title": "Hardcover"
+        },
+        {
+          "const": "spiral",
+          "title": "Spiral bound"
+        }
+      ]
+    },
+    "binding_color": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Binding color",
+      "oneOf": [
+        {
+          "const": "black",
+          "title": "Black"
+        },
+        {
+          "const": "white",
+          "title": "White"
+        }
+      ]
     }
   },
-  "required": ["title", "isbn", "main_author"],
+  "required": [
+    "title",
+    "isbn",
+    "main_author"
+  ],
   "allOf": [
     {
-      "if": { "properties": { "status": { "const": "archived" } }, "required": ["status"] },
+      "if": {
+        "properties": {
+          "status": {
+            "const": "archived"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
       "then": {
         "properties": {
-          "archive_reason": { "type": "string", "title": "Archive Reason", "format": "textarea" }
+          "archive_reason": {
+            "type": "string",
+            "title": "Archive Reason",
+            "format": "textarea"
+          }
         },
-        "required": ["archive_reason"]
+        "required": [
+          "archive_reason"
+        ]
       }
     },
     {
-      "if": { "properties": { "status": { "const": "published" } }, "required": ["status"] },
+      "if": {
+        "properties": {
+          "status": {
+            "const": "published"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
       "then": {
         "properties": {
-          "published_at": { "type": "string", "title": "Published At", "format": "date" }
+          "published_at": {
+            "type": "string",
+            "title": "Published At",
+            "format": "date"
+          }
         },
-        "required": ["published_at"]
+        "required": [
+          "published_at"
+        ]
       }
     }
   ],
   "dependentSchemas": {
     "publisher": {
       "properties": {
-        "edition": { "type": "string", "title": "Edition" }
+        "edition": {
+          "type": "string",
+          "title": "Edition"
+        }
       }
     }
   }
