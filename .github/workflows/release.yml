@@ -46,6 +46,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Run unit tests
+        # Releases publish straight to npm `latest` and overwrite the live
+        # CDN channel — never ship an untested bundle.
+        run: pnpm test
+
       - name: Build (IIFE + CSS + ESM + all-in-one)
         run: pnpm build
 
