@@ -2,7 +2,8 @@ import { defineConfig } from 'vitest/config'
 import vue from '@vitejs/plugin-vue'
 
 // Unit-test config — separate from vite.config.mjs, which only serves the
-// manual playground in test/ (root: 'test') and must not affect test runs.
+// manual playground in playground/ (root: 'playground') and must not affect
+// unit-test runs.
 export default defineConfig({
   plugins: [vue()],
   resolve: {

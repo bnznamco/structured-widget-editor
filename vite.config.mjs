@@ -3,7 +3,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readFileSync, existsSync } from 'node:fs';
 import vue from '@vitejs/plugin-vue';
-import apiPlugin from './test/api.mjs';
+import apiPlugin from './playground/api.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -28,7 +28,7 @@ function distPlugin() {
 }
 
 export default defineConfig({
-  root: 'test',
+  root: 'playground',
   plugins: [vue(), apiPlugin(), distPlugin()],
   resolve: {
     alias: {

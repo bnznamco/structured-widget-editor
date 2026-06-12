@@ -29,7 +29,7 @@
     "dev": "rollup -c -w",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:serve": "vite --open"
+    "playground": "vite --open"
   },
   "keywords": [
     "json-schema",
