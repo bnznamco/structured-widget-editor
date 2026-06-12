@@ -1,0 +1,11 @@
+# Approve dependency build scripts. The two keys target different pnpm majors
+# so the scripts run whether CI is on pnpm latest (11+, reads `allowBuilds`)
+# or a dev machine is on pnpm 10 (reads `onlyBuiltDependencies`). esbuild
+# fetches its native binary for vite/vitest; @parcel/watcher is vite's
+# optional native file watcher.
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - esbuild
