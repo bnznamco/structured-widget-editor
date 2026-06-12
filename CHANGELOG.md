@@ -1,3 +1,17 @@
+# [1.3.0](https://github.com/bnznamco/structured-widget-editor/compare/v1.2.2...v1.3.0) (2026-06-12)
+
+
+### Bug Fixes
+
+* keep json_schema_extra sibling hints on optional fields ([e8dab88](https://github.com/bnznamco/structured-widget-editor/commit/e8dab88a72c5e449213102c6aa3365608b3e46b3))
+* render choice-list oneOf as a select instead of a hidden constant ([114ad2a](https://github.com/bnznamco/structured-widget-editor/commit/114ad2aeab7e1019ec61c30392ddc238ac0835ff))
+* restore conditional field values when their rule re-activates ([cfac74f](https://github.com/bnznamco/structured-widget-editor/commit/cfac74f2605b362faa9cd6561f3f527c1e3b541f))
+
+
+### Features
+
+* add DateEditor component ([533497f](https://github.com/bnznamco/structured-widget-editor/commit/533497f05e97afd9aa2c04c7b8599a764dc3ebe6))
+
 ## [1.2.2](https://github.com/bnznamco/structured-widget-editor/compare/v1.2.1...v1.2.2) (2026-04-08)
 
 
