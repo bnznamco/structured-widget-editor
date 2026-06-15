@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/bnznamco/structured-widget-editor/compare/v1.3.0...v1.4.0) (2026-06-15)
+
+
+### Features
+
+* implement multicolumn layout for object fields with responsive sizing ([4cce8f6](https://github.com/bnznamco/structured-widget-editor/commit/4cce8f60c6c3b3d17e93a353c3edadfddf754389))
+
 # [1.3.0](https://github.com/bnznamco/structured-widget-editor/compare/v1.2.2...v1.3.0) (2026-06-12)
 
 
