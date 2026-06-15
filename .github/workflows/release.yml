@@ -1,4 +1,4 @@
-name: Release
+name: 🚀 Release
 
 on:
   workflow_dispatch:
@@ -22,39 +22,40 @@ jobs:
     # it from a non-master ref (including force_publish recovery runs).
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
+    name: 🚀 Publish & deploy
     outputs:
       new_release_version: ${{ steps.semantic.outputs.new_release_version }}
       new_release_published: ${{ steps.semantic.outputs.new_release_published }}
     steps:
-      - name: Checkout
+      - name: 📌 Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup pnpm
+      - name: 📦 Setup pnpm
         # Version comes from the "packageManager" field in package.json — do
         # not float to latest (pnpm 11 dropped Node 20: it imports node:sqlite).
         uses: pnpm/action-setup@v4
 
-      - name: Setup Node.js
+      - name: ⚙️ Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: pnpm
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Install dependencies
+      - name: 🧩 Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run unit tests
+      - name: 🔬 Run unit tests
         # Releases publish straight to npm `latest` and overwrite the live
         # CDN channel — never ship an untested bundle.
         run: pnpm test
 
-      - name: Build (IIFE + CSS + ESM + all-in-one)
+      - name: 📦 Build (IIFE + CSS + ESM + all-in-one)
         run: pnpm build
 
-      - name: Semantic Release
+      - name: 🏷️ Semantic Release
         id: semantic
         # No `branches` override: the release branch configuration lives in
         # package.json ("release".branches = ["master"]).
@@ -62,7 +63,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Resolve publish version
+      - name: 🔖 Resolve publish version
         id: version
         if: steps.semantic.outputs.new_release_published == 'true' || fromJSON(inputs.force_publish)
         run: |
@@ -72,11 +73,11 @@ jobs:
           fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Publish to npm (OIDC Trusted Publishing)
+      - name: 🚢 Publish to npm (OIDC Trusted Publishing)
         if: steps.semantic.outputs.new_release_published == 'true' || inputs.force_publish
         run: npm publish --provenance --access public
 
-      - name: Prepare CDN directory
+      - name: 🗂️ Prepare CDN directory
         if: steps.semantic.outputs.new_release_published == 'true' || inputs.force_publish
         run: |
           VERSION="${{ steps.version.outputs.version }}"
@@ -93,7 +94,7 @@ jobs:
           cp dist/structured-widget-editor.css     cdn/latest/
           cp dist/structured-widget-editor.esm.js  cdn/latest/
 
-      - name: Deploy to GitHub Pages
+      - name: 🌐 Deploy to GitHub Pages
         if: steps.semantic.outputs.new_release_published == 'true' || fromJSON(inputs.force_publish)
         uses: peaceiris/actions-gh-pages@v4
         with:
