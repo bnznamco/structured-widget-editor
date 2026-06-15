@@ -79,6 +79,35 @@ describe('RelationEditor rich item rendering', () => {
     expect(el.querySelector('.sf-relation-tag-text').textContent.trim()).toBe('Chosen')
   })
 
+  it('infinite scroll: fetches the next page near the bottom only when more & idle', async () => {
+    const { inst } = mountRelation({ schema: relSchema(), modelValue: null })
+    const ed = inst()
+    const calls = []
+    ed.fetchResults = (q, page) => calls.push([q, page]) // stub out the network
+    ed.searchQuery = 'foo'
+    ed.currentPage = 2
+    // happy-dom geometry is all-zero, so the "near bottom" check is satisfied;
+    // this isolates the hasMore / loading guards.
+    ed.dropdownVisible = true
+    await nextTick()
+
+    ed.hasMore = true
+    ed.loading = false
+    ed.onDropdownScroll()
+    expect(calls).toEqual([['foo', 3]]) // currentPage + 1
+
+    // already loading -> no duplicate request
+    ed.loading = true
+    ed.onDropdownScroll()
+    expect(calls.length).toBe(1)
+
+    // no more pages -> no request
+    ed.loading = false
+    ed.hasMore = false
+    ed.onDropdownScroll()
+    expect(calls.length).toBe(1)
+  })
+
   it('honours configurable field names via options.itemImage / itemDescription', async () => {
     const { el, inst } = mountRelation({
       schema: relSchema({ itemImage: 'thumb', itemDescription: 'subtitle' }),

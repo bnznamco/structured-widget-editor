@@ -160,18 +160,12 @@
     font-style: italic;
   }
 
-  .sf-relation-dropdown-more {
+  .sf-relation-dropdown-loading {
     padding: 8px 12px;
     text-align: center;
-    cursor: pointer;
     font-size: 0.75rem;
-    color: var(--link-fg, #417690);
-    font-weight: 600;
+    color: var(--body-quiet-color, #999);
+    font-style: italic;
     border-top: 1px solid var(--hairline-color, #eee);
-    transition: background 0.1s;
-
-    &:hover {
-      background: var(--darkened-bg, #f0f0f0);
-    }
   }
 }

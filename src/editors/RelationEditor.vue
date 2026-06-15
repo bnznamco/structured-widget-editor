@@ -21,7 +21,7 @@
           autocomplete="off" v-model="searchQuery" @input="onSearchInput" @focus="openDropdown"
           @keydown="handleKeyDown" />
         <!-- Dropdown -->
-        <div v-show="dropdownVisible" class="sf-relation-dropdown">
+        <div v-show="dropdownVisible" class="sf-relation-dropdown" ref="dropdown" @scroll="onDropdownScroll">
           <div v-if="filteredResults.length === 0 && !loading" class="sf-relation-dropdown-empty">
             No results found
           </div>
@@ -35,9 +35,7 @@
               }}</span>
             </span>
           </div>
-          <div v-if="hasMore" class="sf-relation-dropdown-more" @click="fetchResults(searchQuery, currentPage + 1)">
-            Load more...
-          </div>
+          <div v-if="loading" class="sf-relation-dropdown-loading">Loading…</div>
         </div>
       </div>
     </div>
@@ -193,6 +191,18 @@ export default {
         this.hasMore = data.more;
       } finally {
         this.loading = false;
+      }
+    },
+    onDropdownScroll() {
+      // Infinite scroll: pull the next page once the user nears the bottom.
+      // The `loading` flag is set synchronously at the top of fetchResults,
+      // so rapid-fire scroll events can't trigger duplicate page loads.
+      if (!this.hasMore || this.loading) return;
+      const el = this.$refs.dropdown;
+      if (!el) return;
+      const remaining = el.scrollHeight - el.scrollTop - el.clientHeight;
+      if (remaining <= 48) {
+        this.fetchResults(this.searchQuery, this.currentPage + 1);
       }
     },
     async hydrateSelectedDisplay() {
