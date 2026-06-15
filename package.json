@@ -3,6 +3,10 @@
   "version": "1.3.0",
   "description": "A lightweight JSON Schema form builder with support for relation fields (ForeignKey, QuerySet) and autocomplete search.",
   "type": "module",
+  "packageManager": "pnpm@10.11.1",
+  "engines": {
+    "node": ">=20"
+  },
   "main": "dist/structured-widget-editor.js",
   "module": "dist/structured-widget-editor.esm.js",
   "repository": {
