@@ -1,3 +1,11 @@
+# [1.5.0](https://github.com/bnznamco/structured-widget-editor/compare/v1.4.0...v1.5.0) (2026-06-15)
+
+
+### Features
+
+* enhance RelationEditor with rich item rendering and configurable display options ([ac9f7b6](https://github.com/bnznamco/structured-widget-editor/commit/ac9f7b6d6d2c03a8d391a31ccda70268f28eaa69))
+* implement infinite scroll in RelationEditor ([02ab2e6](https://github.com/bnznamco/structured-widget-editor/commit/02ab2e6ad2f69597a9c027d7298a5277f0390975))
+
 # [1.4.0](https://github.com/bnznamco/structured-widget-editor/compare/v1.3.0...v1.4.0) (2026-06-15)
 
 
