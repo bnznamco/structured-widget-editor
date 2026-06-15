@@ -1,14 +1,14 @@
 [
-  { "id": 1, "name": "Gabriel García Márquez", "model": "library.Author" },
-  { "id": 2, "name": "Jorge Luis Borges", "model": "library.Author" },
-  { "id": 3, "name": "Isabel Allende", "model": "library.Author" },
-  { "id": 4, "name": "Pablo Neruda", "model": "library.Author" },
-  { "id": 5, "name": "Mario Vargas Llosa", "model": "library.Author" },
-  { "id": 6, "name": "Julio Cortázar", "model": "library.Author" },
-  { "id": 7, "name": "Octavio Paz", "model": "library.Author" },
-  { "id": 8, "name": "Carlos Fuentes", "model": "library.Author" },
-  { "id": 9, "name": "Eduardo Galeano", "model": "library.Author" },
-  { "id": 10, "name": "Roberto Bolaño", "model": "library.Author" },
-  { "id": 11, "name": "Clarice Lispector", "model": "library.Author" },
-  { "id": 12, "name": "Juan Rulfo", "model": "library.Author" }
+  { "id": 1, "name": "Gabriel García Márquez", "model": "library.Author", "image": "https://picsum.photos/seed/author-1/64", "description": "Colombian · Magical realism" },
+  { "id": 2, "name": "Jorge Luis Borges", "model": "library.Author", "image": "https://picsum.photos/seed/author-2/64", "description": "Argentine · Short fiction" },
+  { "id": 3, "name": "Isabel Allende", "model": "library.Author", "image": "https://picsum.photos/seed/author-3/64", "description": "Chilean · Novelist" },
+  { "id": 4, "name": "Pablo Neruda", "model": "library.Author", "image": "https://picsum.photos/seed/author-4/64", "description": "Chilean · Poet" },
+  { "id": 5, "name": "Mario Vargas Llosa", "model": "library.Author", "image": "https://picsum.photos/seed/author-5/64", "description": "Peruvian · Novelist" },
+  { "id": 6, "name": "Julio Cortázar", "model": "library.Author", "image": "https://picsum.photos/seed/author-6/64", "description": "Argentine · Short fiction" },
+  { "id": 7, "name": "Octavio Paz", "model": "library.Author", "image": "https://picsum.photos/seed/author-7/64", "description": "Mexican · Poet, essayist" },
+  { "id": 8, "name": "Carlos Fuentes", "model": "library.Author", "image": "https://picsum.photos/seed/author-8/64", "description": "Mexican · Novelist" },
+  { "id": 9, "name": "Eduardo Galeano", "model": "library.Author", "image": "https://picsum.photos/seed/author-9/64", "description": "Uruguayan · Journalist" },
+  { "id": 10, "name": "Roberto Bolaño", "model": "library.Author", "image": "https://picsum.photos/seed/author-10/64", "description": "Chilean · Novelist, poet" },
+  { "id": 11, "name": "Clarice Lispector", "model": "library.Author", "image": "https://picsum.photos/seed/author-11/64", "description": "Brazilian · Novelist" },
+  { "id": 12, "name": "Juan Rulfo", "model": "library.Author", "image": "https://picsum.photos/seed/author-12/64", "description": "Mexican · Novelist" }
 ]

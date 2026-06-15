@@ -5,6 +5,8 @@
       <!-- Selected items -->
       <div v-if="selected.length" class="sf-relation-selected">
         <div v-for="item in selected" :key="itemKey(item)" class="sf-relation-tag">
+          <img v-if="getItemImage(item)" class="sf-relation-tag-image" :src="getItemImage(item)" alt=""
+            loading="lazy" />
           <span class="sf-relation-tag-text">{{ getDisplayName(item) }}</span>
           <button v-if="isMultiple || allowClear" type="button" class="sf-relation-tag-remove"
             @click.stop="removeItem(item)">
@@ -25,7 +27,13 @@
           </div>
           <div v-for="(item, i) in filteredResults" :key="itemKey(item)" class="sf-relation-dropdown-item"
             :class="{ highlighted: i === highlightIndex }" @click="selectItem(item)">
-            {{ getDisplayName(item) }}
+            <img v-if="getItemImage(item)" class="sf-relation-item-image" :src="getItemImage(item)" alt=""
+              loading="lazy" />
+            <span class="sf-relation-item-content">
+              <span class="sf-relation-item-name">{{ getDisplayName(item) }}</span>
+              <span v-if="getItemDescription(item)" class="sf-relation-item-description">{{ getItemDescription(item)
+              }}</span>
+            </span>
           </div>
           <div v-if="hasMore" class="sf-relation-dropdown-more" @click="fetchResults(searchQuery, currentPage + 1)">
             Load more...
@@ -65,11 +73,18 @@ export default {
     } else {
       selected = value ? [value] : [];
     }
+    const options = this.schema.options || {};
     return {
       isMultiple,
-      allowClear: this.schema.options?.select2?.allowClear ?? true,
-      placeholder: this.schema.options?.select2?.placeholder || 'Search...',
-      searchUrl: this.schema.options?.select2?.ajax?.url || '',
+      allowClear: options.select2?.allowClear ?? true,
+      placeholder: options.select2?.placeholder || 'Search...',
+      searchUrl: options.select2?.ajax?.url || '',
+      // Generic, presentation-only rendering. An item may carry an image URL
+      // and/or a secondary text line; the field name each lives under is
+      // configurable (defaults: `image` / `description`) so the editor stays
+      // agnostic of any particular backend model.
+      imageKey: options.itemImage || 'image',
+      descriptionKey: options.itemDescription || 'description',
       selected,
       dropdownVisible: false,
       searchResults: [],
@@ -114,6 +129,7 @@ export default {
   },
   mounted() {
     document.addEventListener('click', this._onDocClick);
+    this.hydrateSelectedDisplay();
   },
   beforeUnmount() {
     document.removeEventListener('click', this._onDocClick);
@@ -129,6 +145,14 @@ export default {
         if (item[key]) return String(item[key]);
       }
       return `#${item.id || '?'}`;
+    },
+    getItemImage(item) {
+      const url = item && item[this.imageKey];
+      return typeof url === 'string' && url.trim() ? url : '';
+    },
+    getItemDescription(item) {
+      const desc = item && item[this.descriptionKey];
+      return desc != null && desc !== '' ? String(desc) : '';
     },
     itemKey(item) {
       return `${item.id}-${item.model || ''}`;
@@ -169,6 +193,37 @@ export default {
         this.hasMore = data.more;
       } finally {
         this.loading = false;
+      }
+    },
+    async hydrateSelectedDisplay() {
+      // Persisted relations only carry the minimal {id, name, model} dict, so
+      // pre-selected items have no image/description after a reload. Re-fetch
+      // their display data by pk from the same search endpoint and layer it
+      // underneath (persisted identity always wins). Best-effort: any failure
+      // simply leaves the items as text-only.
+      if (!this.searchUrl || !this.selected.length) return;
+      const needs = this.selected.filter(
+        (it) => it && it.id != null && !this.getItemImage(it) && !this.getItemDescription(it)
+      );
+      if (!needs.length) return;
+      try {
+        const url = new URL(this.searchUrl, window.location.origin);
+        url.searchParams.set('_q', `_pk__in=${needs.map((it) => it.id).join(',')}`);
+        url.searchParams.set('page', '1');
+        const lang = typeof this.language === 'function' ? this.language() : this.language;
+        if (lang) url.searchParams.set('_lang', lang);
+
+        const response = await fetch(url, { credentials: 'same-origin' });
+        if (!response.ok) return;
+        const data = await response.json();
+        const byKey = {};
+        for (const it of data.items || []) byKey[this.itemKey(it)] = it;
+        this.selected = this.selected.map((it) => {
+          const fresh = byKey[this.itemKey(it)];
+          return fresh ? { ...fresh, ...it } : it;
+        });
+      } catch {
+        /* display hydration is best-effort */
       }
     },
     handleKeyDown(e) {
