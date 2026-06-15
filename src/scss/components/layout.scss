@@ -1,0 +1,76 @@
+// Multicolumn flow layout for object fields.
+//
+// Model: each .sf-object-fields is a wrapping flex row; cells carry a
+// flex-basis token per field kind (set in src/layout.js) and grow to share
+// the line. Columns emerge from the available width at every nesting level —
+// no media/container queries, no containment (container-type would create
+// stacking contexts under the relation dropdown and collapse the widget's
+// intrinsic width inside Django tabular-inline table cells).
+//
+// Invariant: visual order === DOM order === tab order. No `order`, ever.
+//
+// Gate: @supports (inset: 0) matches the flex-`gap` era (Chrome 87+,
+// FF 66+, Safari 14.5+). Do not test `gap` itself — it false-positives on
+// browsers that only support grid gap. Ungated browsers keep the original
+// single-column flex layout from editors.scss.
+.structured-field-editor {
+
+  .sf-cell {
+    // Required guard: without it a long relation tag or wide intrinsic
+    // content makes the flex item refuse to shrink and blows up the row.
+    min-width: 0;
+  }
+
+  .sf-cell-hidden {
+    display: none;
+  }
+
+  @supports (inset: 0) {
+    .sf-object-fields {
+      flex-flow: row wrap;
+      column-gap: 16px;
+      align-items: flex-start;
+    }
+
+    // Vertical rhythm stays on the editors' own margin-bottom (as in the
+    // single-column layout), so the zero-height row break adds no space.
+    .sf-flow-break {
+      flex-basis: 100%;
+      height: 0;
+    }
+
+    .sf-cell-xs   { flex: 1 1 var(--sf-basis-xs, 8rem); }
+    .sf-cell-sm   { flex: 1 1 var(--sf-basis-sm, 12rem); }
+    .sf-cell-md   { flex: 1 1 var(--sf-basis-md, 18rem); }
+    .sf-cell-lg   { flex: 1 1 var(--sf-basis-lg, 26rem); }
+    .sf-cell-full { flex: 1 1 100%; }
+
+    // Checkbox fields have no label above: equalize the bottom margin and
+    // anchor them to the line's bottom so the checkbox row sits on the same
+    // visual line as its neighbors' inputs.
+    .sf-cell > .sf-field-boolean {
+      margin-bottom: 12px;
+    }
+
+    .sf-cell-bool {
+      align-self: flex-end;
+
+      .sf-boolean-row {
+        min-height: var(--sf-control-height, 30px);
+      }
+    }
+
+    // While validation errors are shown, flex-end would sink checkboxes to
+    // the bottom of the grown line; anchor them to the top instead with a
+    // synthesized label row (one .sf-label line + its 4px margin).
+    @supports selector(:has(*)) {
+      .sf-object-fields:has(.errorlist) > .sf-cell-bool {
+        align-self: flex-start;
+
+        > .sf-field-boolean {
+          padding-top: calc(0.8125rem * 1.4 + 4px);
+        }
+      }
+    }
+  }
+}

@@ -1,15 +1,18 @@
 <template>
   <div v-if="isRoot" class="sf-object sf-object-root">
     <div class="sf-object-fields">
-      <SchemaEditor
-        v-for="(propSchema, key) in (effectiveSchema.properties || {})"
-        :key="key"
-        :schema="form.resolveSchema(propSchema)"
-        :model-value="(modelValue || {})[key]"
-        :path="[...path, key]"
-        :form="form"
-        @update:model-value="onChildChange(key, $event)"
-      />
+      <template v-for="cell in cells" :key="cell.key">
+        <div v-if="cell.breakBefore" class="sf-flow-break" aria-hidden="true"></div>
+        <div :class="cell.classes">
+          <SchemaEditor
+            :schema="cell.schema"
+            :model-value="(modelValue || {})[cell.key]"
+            :path="[...path, cell.key]"
+            :form="form"
+            @update:model-value="onChildChange(cell.key, $event)"
+          />
+        </div>
+      </template>
     </div>
   </div>
   <fieldset v-else class="sf-object" :class="{ 'sf-object-collapsed': collapsed }">
@@ -21,15 +24,18 @@
       <span v-if="collapsed && summary" class="sf-object-summary">{{ summary }}</span>
     </legend>
     <div v-show="!collapsed" class="sf-object-fields">
-      <SchemaEditor
-        v-for="(propSchema, key) in (effectiveSchema.properties || {})"
-        :key="key"
-        :schema="form.resolveSchema(propSchema)"
-        :model-value="(modelValue || {})[key]"
-        :path="[...path, key]"
-        :form="form"
-        @update:model-value="onChildChange(key, $event)"
-      />
+      <template v-for="cell in cells" :key="cell.key">
+        <div v-if="cell.breakBefore" class="sf-flow-break" aria-hidden="true"></div>
+        <div :class="cell.classes">
+          <SchemaEditor
+            :schema="cell.schema"
+            :model-value="(modelValue || {})[cell.key]"
+            :path="[...path, cell.key]"
+            :form="form"
+            @update:model-value="onChildChange(cell.key, $event)"
+          />
+        </div>
+      </template>
     </div>
   </fieldset>
 </template>
@@ -38,6 +44,7 @@
 import SchemaEditor from './SchemaEditor.vue';
 import SfIcon from './SfIcon.vue';
 import { applyConditionals, hasConditionals } from '../conditionals';
+import { layoutCells } from '../layout';
 
 export default {
   name: 'ObjectEditor',
@@ -45,6 +52,9 @@ export default {
     if (!this.$options.components) this.$options.components = {};
     this.$options.components.SchemaEditor = SchemaEditor;
     this.$options.components.SfIcon = SfIcon;
+  },
+  inject: {
+    customEditors: { default: () => () => [] },
   },
   props: {
     schema: { type: Object, required: true },
@@ -71,6 +81,13 @@ export default {
     effectiveSchema() {
       if (!hasConditionals(this.schema)) return this.schema;
       return applyConditionals(this.schema, this.modelValue || {}, this.form?.resolveSchema);
+    },
+    cells() {
+      return layoutCells(this.effectiveSchema.properties, {
+        resolveSchema: this.form?.resolveSchema,
+        customEditors: this.customEditors(),
+        basePath: this.path,
+      });
     },
     summary() {
       const val = this.modelValue || {};

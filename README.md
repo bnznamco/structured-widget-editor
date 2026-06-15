@@ -182,6 +182,8 @@ The search endpoint should return:
 
 Query parameters sent: `_q` (search term), `page` (pagination).
 
+For styling, the editor root exposes state classes: `sf-relation-multiple` when the field accepts multiple values, and `sf-relation-open` while the autocomplete dropdown is visible.
+
 ## Editors
 
 | Schema type | Editor | Description |
@@ -196,6 +198,55 @@ Query parameters sent: `_q` (search term), `page` (pagination).
 | `anyOf [T, null]` | NullableEditor | Togglable wrapper |
 | `oneOf + discriminator` | UnionEditor | Type selector |
 | `relation` | RelationEditor | Autocomplete with search |
+
+## Multicolumn layout
+
+Object fields flow into a responsive multicolumn layout: every field gets an intrinsic **size token** from its schema, and columns emerge naturally from the available width at each nesting level (no media queries — the layout adapts to the actual container, so it works in narrow admin inlines and nested fieldsets alike). Visual order always equals schema/DOM order.
+
+| Token | flex-basis | Assigned to |
+|---|---|---|
+| `xs` | `8rem` | boolean, integer, number |
+| `sm` | `12rem` | date, compact enums/choices (≤8 options, short labels), strings with `maxLength ≤ 40` |
+| `md` | `18rem` | plain strings, date-time, single relations, wide enums |
+| `lg` | `26rem` | multiple relations |
+| `full` | 100% | objects, arrays, unions, JSON, textareas (`format: 'textarea'` or `maxLength > 255`), custom editors |
+
+Nullable scalars are bumped one tier (`xs → sm`, `sm → md`) to make room for the inline null-clear button. `const` / discriminator fields render as hidden cells and leave no gap.
+
+### Per-field overrides
+
+Schema authors can override the heuristic with a `layout` keyword on any property — from pydantic, pass it via `json_schema_extra`:
+
+```python
+class Book(BaseModel):
+    isbn: str = Field(json_schema_extra={"layout": "sm"})
+    summary: str = Field(json_schema_extra={"layout": {"size": "full", "break": "before"}})
+```
+
+- `layout: '<token>'` — shorthand for `{ size: '<token>' }`.
+- `layout.size` — one of `xs | sm | md | lg | full`.
+- `layout.break` — `'before' | 'after' | 'both'`: force a row break before and/or after the field. `'after'` breaks before the next *visible* field (hidden const fields are skipped).
+- Invalid values are silently ignored and the heuristic applies.
+- Caveat: on a multi-branch union **without** a discriminator (e.g. `Union[int, str]`), the widget collapses to the first branch and outer keywords — `layout` included — are dropped; put the hint inside the first branch or add a discriminator. `Optional[T]` fields are unaffected (sibling keys are carried through the nullable collapse).
+- A `layout` size on a `const` / hidden field is ignored — hidden fields never occupy a cell.
+
+Custom-editor matches default to `full` (their rendering is unpredictable); override with the schema `layout` hint or a `layout` key on the `customEditors` entry itself.
+
+### Theming the layout
+
+The basis tokens and the checkbox row height are read from CSS custom properties, so embedders can retune density without touching the bundle:
+
+```css
+.structured-field-editor {
+  --sf-basis-xs: 7rem;
+  --sf-basis-sm: 11rem;
+  --sf-basis-md: 16rem;
+  --sf-basis-lg: 24rem;
+  --sf-control-height: 30px;
+}
+```
+
+Browsers without flex `gap` support (pre-2021) automatically keep the original single-column layout.
 
 ## Custom Editors
 

@@ -154,7 +154,8 @@ const app = createApp({
     const statusText = ref('Ready');
 
     const customEditors = [
-      { match: (s, path) => path.at(-1) === 'price', component: PriceEditor },
+      // `layout` sizes the cell of a custom editor (default is 'full')
+      { match: (s, path) => path.at(-1) === 'price', component: PriceEditor, layout: 'lg' },
       { match: (s, path) => path.at(-1) === 'notes', component: 'notes-editor' },
     ];
 

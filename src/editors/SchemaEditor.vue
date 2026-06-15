@@ -36,8 +36,7 @@ import RelationEditor from './RelationEditor.vue';
 import JsonEditor from './JsonEditor.vue';
 import WebComponentWrapper from './WebComponentWrapper.vue';
 import { isChoiceOneOf } from '../utils';
-
-const MAX_DEPTH = 12;
+import { MAX_DEPTH } from '../layout';
 
 export default {
   name: 'SchemaEditor',

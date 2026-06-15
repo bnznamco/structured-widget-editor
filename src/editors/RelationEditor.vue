@@ -1,5 +1,5 @@
 <template>
-  <div class="sf-field sf-relation" :class="{ errors: fieldErrors.length }" ref="root">
+  <div class="sf-field sf-relation" :class="{ errors: fieldErrors.length, 'sf-relation-multiple': isMultiple, 'sf-relation-open': dropdownVisible }" ref="root">
     <span class="sf-label" :class="{ required: isRequired }">{{ title }}</span>
     <div class="sf-relation-wrapper">
       <!-- Selected items -->

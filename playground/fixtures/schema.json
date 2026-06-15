@@ -77,7 +77,8 @@
     },
     "isbn": {
       "type": "string",
-      "title": "ISBN"
+      "title": "ISBN",
+      "layout": "sm"
     },
     "description": {
       "type": "string",
